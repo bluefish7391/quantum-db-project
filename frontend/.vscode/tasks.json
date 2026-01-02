@@ -37,6 +37,24 @@
           }
         }
       }
+    },
+    {
+      "label": "Start Frontend",
+      "type": "shell",
+      "command": "ng serve",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}/frontend" }
+    },
+    {
+      "label": "Start Backend (Node)",
+      "type": "shell",
+      "command": "nodemon --exec npx ts-node index.ts",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}/backend" }
+    },
+    {
+      "label": "Start All",
+      "dependsOn": ["Start Frontend", "Start Backend (Node)"]
     }
   ]
 }
