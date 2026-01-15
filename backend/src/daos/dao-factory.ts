@@ -1,4 +1,5 @@
 
 import { DataDAO } from './data-dao';
 
-export const dataDAO = new DataDAO("../../db/database.sqlite");
+const DATABASE_PATH: string = "../../db/database.sqlite";
+export const dataDAO = new DataDAO(DATABASE_PATH);

@@ -11,7 +11,7 @@ export class DataRouter extends BaseRouter {
         this.sendNormalResponse(res, { message: `Search query received: ${query}` });
     }
 
-    static buildRouter() {
+    buildRouter() {
         const dataRouter = new DataRouter();
         return express.Router()
             .get('/data', dataRouter.getData.bind(dataRouter))

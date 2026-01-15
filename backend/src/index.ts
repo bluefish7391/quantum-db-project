@@ -3,18 +3,22 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import sqlite3 from 'sqlite3';
 import { exec } from 'child_process';
+import { DataRouter } from './routers/data-router';
 
 const app = express();
 const port = 3000;
-const db = new sqlite3.Database('../db/quantum.db');
 
 app.use(cors());
 app.use(bodyParser.json());
-
-db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS sample_table (id INTEGER PRIMARY KEY, data TEXT)');
-  // db.run("INSERT INTO sample_table (data) VALUES ('Sample quantum data 1'), ('Sample quantum data 2')");
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Expires', '0');
+  next();
 });
+
+app.use('/api/data', new DataRouter().buildRouter());
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+
 
 // app.get('/api/data', (req, res) => {
 //   db.all('SELECT * FROM your_table', (err, rows) => {
@@ -33,5 +37,3 @@ db.serialize(() => {
 //     res.json({ result: stdout.trim() });
 //   });
 // });
-
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
