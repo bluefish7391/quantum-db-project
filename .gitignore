@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+npm-debug.log
+backend/dist/
+
+# Angular
+frontend/dist/
+frontend/node_modules/
+
+# Python/Qiskit
+quantum/venv/
+quantum/__pycache__/
+*.pyc
+*.pyo
+
+# Database and env
+db/quantum.db
+.env
+
+# Misc
+*.log
+.DS_Store
