@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 
-export class DataDAO {
+export class DataDao {
   private db: sqlite3.Database;
 
   constructor(dbPath: string) {

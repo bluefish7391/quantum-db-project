@@ -1,20 +1,29 @@
-import { BaseRouter } from "./base-router";
-import express, { Response, Request } from "express";
+import express, { Router } from 'express';
+import { DataManager } from '../managers/data-manager';
 
-export class DataRouter extends BaseRouter {
-    async getData(req: Request, res: Response) {
-        this.sendNormalResponse(res, { message: "GET request received" });
-    }
+export class DataRouter {
+  private router: Router;
+  private dataManager: DataManager;
 
-    async search(req: Request, res: Response) {
-        const { query } = req.body;
-        this.sendNormalResponse(res, { message: `Search query received: ${query}` });
-    }
+  constructor(dbPath: string) {
+    this.router = express.Router();
+    this.dataManager = new DataManager(dbPath);
+    this.setupRoutes();
+  }
 
-    buildRouter() {
-        const dataRouter = new DataRouter();
-        return express.Router()
-            .get('/data', dataRouter.getData.bind(dataRouter))
-            .post('/search', dataRouter.search.bind(dataRouter));
-    }
+  private setupRoutes() {
+    this.router.get('/', async (req, res) => {
+      try {
+        const data = await this.dataManager.getAllData();
+        res.json(data);
+      } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+      }
+    });
+
+  }
+
+  public buildRouter(): Router {
+    return this.router;
+  }
 }
