@@ -1,3 +1,6 @@
+
+@use 'sass:color';
+
 :host {
     display: block;
     padding: 24px;
@@ -7,29 +10,29 @@
     margin: 0 auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-  }
+}
   
   $primary-blue: #005abb;
   $light-blue: #e6f0ff;
   $gray-text: #4a5568;
   $border-color: #e2e8f0;
   $hover-bg: #f8fafc;
-  
-  h2 {
+
+h2 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 24px;
     color: $gray-text;
-  }
-  
-  h3 {
+}
+
+h3 {
     font-size: 1.25rem;
     font-weight: 500;
     margin: 24px 0 16px;
     color: $gray-text;
-  }
-  
-  table {
+}
+
+table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
@@ -38,30 +41,30 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  thead {
+}
+
+thead {
     background-color: $primary-blue;
     color: white;
-  }
-  
-  th {
+}
+
+th {
     padding: 12px 16px;
     text-align: left;
     font-weight: 500;
-  }
-  
-  td {
+}
+
+td {
     padding: 12px 16px;
     text-align: left;
     border-top: 1px solid $border-color;
-  }
-  
-  tbody tr:hover {
+}
+
+tbody tr:hover {
     background-color: $hover-bg;
-  }
-  
-  .no-data {
+}
+
+.no-data {
     text-align: center;
     padding: 32px;
     font-size: 1rem;
@@ -69,36 +72,36 @@
     background-color: $light-blue;
     border-radius: 8px;
     margin-bottom: 24px;
-  }
-  
-  form {
+}
+
+form {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 24px;
-  }
-  
-  label {
+}
+
+label {
     font-weight: 500;
     font-size: 0.875rem;
     color: $gray-text;
-  }
-  
-  input[type="text"] {
+}
+
+input[type="text"] {
     padding: 10px 12px;
     border: 1px solid $border-color;
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.2s ease;
-  }
-  
-  input[type="text"]:focus {
+}
+
+input[type="text"]:focus {
     border-color: $primary-blue;
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 90, 187, 0.1);
-  }
-  
-  button {
+}
+
+button {
     padding: 10px 16px;
     background-color: $primary-blue;
     color: white;
@@ -108,12 +111,12 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
-  }
-  
-  button:hover {
-    background-color: darken($primary-blue, 10%);
-  }
-  
-  button + button {
+}
+
+button:hover {
+    background-color: color.adjust($primary-blue, $lightness: -10%);
+}
+
+button+button {
     margin-left: 8px;
-  }
+}

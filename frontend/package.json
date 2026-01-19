@@ -38,6 +38,7 @@
     "@angular/build": "^21.0.5",
     "@angular/cli": "^21.0.5",
     "@angular/compiler-cli": "^21.0.0",
+    "sass": "^1.97.2",
     "typescript": "~5.9.2"
   }
 }
