@@ -1,11 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 import { DataRouter } from './routers/data-router';
 import { QuantumRouter } from './routers/quantum-router';
 
 const app = express();
 const port = 3000;
-const dbPath = '../../db/quantum.db';
+const dbPath = path.join(__dirname, '../../db/quantum.db');
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
 app.use('/api/data', new DataRouter(dbPath).buildRouter());
 app.use('/api/quantum', new QuantumRouter().buildRouter());
 

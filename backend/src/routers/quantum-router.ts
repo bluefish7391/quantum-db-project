@@ -21,8 +21,6 @@ export class QuantumRouter {
         res.status(500).json({ error: (err as Error).message });
       }
     });
-
-    // Add more quantum routes
   }
 
   public buildRouter(): Router {
