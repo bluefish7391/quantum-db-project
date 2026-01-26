@@ -21,19 +21,27 @@ export class DataRouter extends BaseRouter {
 
   private async createUser(req: Request, res: Response) {
     const user = req.body as User;
-    // if (!name || !email) {
-    //   return res.status(400).json({ error: 'Name and email are required' });
-    // }
-    // try {
-    //   //const userId = await this.dataManager.createUser({ name, email });
-    //   res.status(201).json();
-    // } catch (err) {
-    //   res.status(500).json({ error: (err as Error).message });
-    // }
-    const apiResponse = new ApiResponse();
-    apiResponse.success = true;
-    apiResponse.message = 'User created successfully';
-    this.sendNormalResponse(res, apiResponse);
+    if (!user.name || !user.phone) {
+      const apiResponse = new ApiResponse();
+      apiResponse.success = false;
+      apiResponse.message = 'Name and phone are required';
+
+      this.sendBadRequestResponse(res, apiResponse);
+      return;
+    }
+    try {
+      await this.dataManager.createUser(user);
+      const apiResponse = new ApiResponse();
+      apiResponse.success = true;
+      apiResponse.message = 'User created successfully';
+
+      this.sendNormalResponse(res, apiResponse);
+    } catch (err) {
+      const apiResponse = new ApiResponse();
+      apiResponse.success = false;
+      apiResponse.message = (err as Error).message;
+      this.sendServerErrorResponse(res, apiResponse);
+    }
   }
 
   static buildRouter(dbPath: string): Router {
