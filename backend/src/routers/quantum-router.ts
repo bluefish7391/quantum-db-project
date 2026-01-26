@@ -1,10 +1,12 @@
 import express, { Router, Request, Response } from 'express';
 import { QuantumManager } from '../managers/quantum-manager';
+import { BaseRouter } from './base-router';
 
-export class QuantumRouter {
+export class QuantumRouter extends BaseRouter {
   private quantumManager: QuantumManager;
 
   private constructor() {
+    super();
     this.quantumManager = new QuantumManager();
   }
 

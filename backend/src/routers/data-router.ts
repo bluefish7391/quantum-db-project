@@ -1,11 +1,12 @@
 import express, { Router, Request, Response } from 'express';
 import { DataManager } from '../managers/data-manager';
 import { ApiResponse, User } from '../../../frontend/src/kinds';
+import { BaseRouter } from './base-router';
 
-export class DataRouter {
+export class DataRouter extends BaseRouter {
   private dataManager: DataManager;
-
   private constructor(dbPath: string) {
+    super();
     this.dataManager = new DataManager(dbPath);
   }
 
@@ -32,7 +33,7 @@ export class DataRouter {
     const apiResponse = new ApiResponse();
     apiResponse.success = true;
     apiResponse.message = 'User created successfully';
-    res.status(201).json(apiResponse);
+    this.sendNormalResponse(res, apiResponse);
   }
 
   static buildRouter(dbPath: string): Router {
