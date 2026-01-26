@@ -1,29 +1,27 @@
-import express, { Router } from 'express';
+import express, { Router, Request, Response } from 'express';
 import { QuantumManager } from '../managers/quantum-manager';
 
 export class QuantumRouter {
-  private router: Router;
   private quantumManager: QuantumManager;
 
-  constructor() {
-    this.router = express.Router();
+  private constructor() {
     this.quantumManager = new QuantumManager();
-    this.setupRoutes();
   }
 
-  private setupRoutes() {
-    this.router.post('/search', async (req, res) => {
-      const { query } = req.body;
-      try {
-        const result = await this.quantumManager.runGroverSearch(query);
-        res.json({ result });
-      } catch (err) {
-        res.status(500).json({ error: (err as Error).message });
-      }
-    });
+  private async runUnstructuredSearch(req: Request, res: Response) {
+    const { query } = req.body;
+    try {
+      //const result = await this.quantumManager.runGroverSearch(query);
+      res.json();
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
+    }
   }
 
-  public buildRouter(): Router {
-    return this.router;
+  static buildRouter(): Router {
+    const quantumRouter = new QuantumRouter();
+
+    return express.Router()
+      .post('/search', quantumRouter.runUnstructuredSearch.bind(quantumRouter));
   }
 }

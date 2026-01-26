@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
-app.use('/api/data', new DataRouter(dbPath).buildRouter());
-app.use('/api/quantum', new QuantumRouter().buildRouter());
+app.use('/api/data', DataRouter.buildRouter(dbPath));
+app.use('/api/quantum', QuantumRouter.buildRouter());
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
