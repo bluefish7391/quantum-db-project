@@ -10,3 +10,8 @@ export class User {
         this.phone = phone;
     }
 }
+
+export class ApiResponse {
+    success = false;
+    message = '';
+}
