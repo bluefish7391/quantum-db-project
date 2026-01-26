@@ -1,1 +1,46 @@
-<p>home works!</p>
+<div class="home-container">
+    <mat-card class="welcome-card" appearance="outlined">
+      <mat-card-header>
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title>Quantum DB Project</mat-card-title>
+        <mat-card-subtitle>The Future of Database Operations</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p class="description">
+          A glimpse into the future of quantum database management systems. Featuring
+          efficient unstructured data searches using Grover's algorithm, quantum data 
+          retrieval designed to maintain both data privacy and user privacy, and 
+          quantum cryptography features for secure communications.
+        </p>
+      </mat-card-content>
+  
+      <mat-divider></mat-divider>
+  
+      <mat-card-actions class="button-group">
+        <button mat-flat-button 
+                color="primary" 
+                aria-label="Grover's Algorithm unstructured search"
+                routerLink="/query">
+          <mat-icon>search</mat-icon>
+          Unstructured Search
+        </button>
+  
+        <button mat-stroked-button 
+                color="primary" 
+                routerLink="/data-retrieval"
+                aria-label="Navigate to Quantum Data Retrieval">
+          <mat-icon>cloud_download</mat-icon>
+          Data Retrieval
+        </button>
+  
+        <button mat-button 
+                disabled 
+                title="Feature coming soon"
+                aria-disabled="true">
+          <mat-icon>lock_clock</mat-icon>
+          Cryptography
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
