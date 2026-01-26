@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-query',
+  selector: 'app-unstructured-search',
   imports: [CommonModule, FormsModule],
-  templateUrl: './query.component.html',
-  styleUrl: './query.component.scss',
+  templateUrl: './unstructured-search.component.html',
+  styleUrl: './unstructured-search.component.scss',
 })
-export class QueryComponent {
+export class UnstructuredSearchComponent {
   users: User[] = [];
   newUser: User = new User();
   constructor (
