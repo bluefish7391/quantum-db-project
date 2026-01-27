@@ -11,11 +11,19 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
+  getResponse<T>(endpoint: string): Observable<T> {
+    return this.http.get<T>(`${this.apiUrl}/${endpoint}`);
+  }
+
   postResponse<T>(endpoint: string, data: any): Observable<T> {
     return this.http.post<T>(`${this.apiUrl}/${endpoint}`, data);
   }
 
   createUser(user: User): Observable<User> {
     return this.postResponse<User>('data/create-user', user);
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.getResponse<User[]>('data/get-all-users');
   }
 }

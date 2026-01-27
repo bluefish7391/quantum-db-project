@@ -10,12 +10,12 @@ export class DataRouter extends BaseRouter {
     this.dataManager = new DataManager(dbPath);
   }
 
-  private async getAllData(req: Request, res: Response) {
+  private async getAllUsers(req: Request, res: Response) {
     try {
-      const data = await this.dataManager.getAllData();
-      res.json(data);
-    } catch (err) {
-      res.status(500).json({ error: (err as Error).message });
+      const data = await this.dataManager.getAllUsers();
+      this.sendNormalResponse(res, data);
+    } catch (err: any) {
+      this.sendServerErrorResponse(res, { success: false, message: err.message });
     }
   }
 
@@ -32,11 +32,8 @@ export class DataRouter extends BaseRouter {
     try {
       user.id = await this.dataManager.createUser(user);
       this.sendNormalResponse(res, user);
-    } catch (err) {
-      const apiResponse = new ApiResponse();
-      apiResponse.success = false;
-      apiResponse.message = (err as Error).message;
-      this.sendServerErrorResponse(res, apiResponse);
+    } catch (err: any) {
+      this.sendServerErrorResponse(res, { success: false, message: err.message });
     }
   }
 
@@ -44,7 +41,7 @@ export class DataRouter extends BaseRouter {
     const dataRouter = new DataRouter(dbPath);
 
     return express.Router()
-      .get('/get-all-data', dataRouter.getAllData.bind(dataRouter))
+      .get('/get-all-users', dataRouter.getAllUsers.bind(dataRouter))
       .post('/create-user', dataRouter.createUser.bind(dataRouter));
   }
 }

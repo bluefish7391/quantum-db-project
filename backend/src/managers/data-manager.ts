@@ -8,11 +8,20 @@ export class DataManager {
     this.dataDao = new DataDao(dbPath);
   }
 
-  public async getAllData(): Promise<any[]> {
+  public async getAllUsers(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.dataDao.getAllData((err, rows) => {
+      this.dataDao.getAllUsers((err, rows) => {
         if (err) reject(err);
-        else resolve(rows);
+        else {
+          const users: User[] = rows.map((row) => {
+            const user = new User();
+            user.id = row.id;
+            user.name = row.name;
+            user.phone = row.phone;
+            return user;
+          });
+          resolve(users);
+        }
       });
     });
   }

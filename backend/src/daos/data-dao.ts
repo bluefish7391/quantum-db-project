@@ -24,7 +24,7 @@ export class DataDao {
     });
   }
 
-  public getAllData(callback: (err: Error | null, rows: any[]) => void) {
+  public getAllUsers(callback: (err: Error | null, rows: any[]) => void) {
     this.db.all('SELECT * FROM your_table', callback);
   }
   

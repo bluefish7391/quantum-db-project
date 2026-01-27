@@ -19,6 +19,10 @@ export class UnstructuredSearchComponent {
     this.newUser.id = -1;
   }
 
+  ngOnInit() {
+    this.getAllUsers();
+  }
+
   editUser(user: User) {
     // to implement
   }
@@ -29,7 +33,7 @@ export class UnstructuredSearchComponent {
 
   addUser() {
     this.apiService.createUser(this.newUser).subscribe((response) => {
-      if (response && response.id !== undefined) {
+      if (response && response.id !== -1) {
         this.users = [...this.users, response];
         this.newUser.id = -1;
         this.newUser.name = '';
@@ -38,6 +42,13 @@ export class UnstructuredSearchComponent {
         console.error('Failed to create user:', response);
       }
     });
+  }
+
+  getAllUsers() {
+    this.apiService.getAllUsers().subscribe((users) => {
+      console.log('Fetched users:', users);
+      this.users = users;
+    })
   }
 
   loadSampleDatabase() {
