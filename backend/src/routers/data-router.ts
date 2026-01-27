@@ -30,12 +30,8 @@ export class DataRouter extends BaseRouter {
       return;
     }
     try {
-      await this.dataManager.createUser(user);
-      const apiResponse = new ApiResponse();
-      apiResponse.success = true;
-      apiResponse.message = 'User created successfully';
-
-      this.sendNormalResponse(res, apiResponse);
+      user.id = await this.dataManager.createUser(user);
+      this.sendNormalResponse(res, user);
     } catch (err) {
       const apiResponse = new ApiResponse();
       apiResponse.success = false;

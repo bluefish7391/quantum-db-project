@@ -15,7 +15,7 @@ export class ApiService {
     return this.http.post<T>(`${this.apiUrl}/${endpoint}`, data);
   }
 
-  createUser(user: User): Observable<ApiResponse> {
-    return this.postResponse<ApiResponse>('data/create-user', user);
+  createUser(user: User): Observable<User> {
+    return this.postResponse<User>('data/create-user', user);
   }
 }
