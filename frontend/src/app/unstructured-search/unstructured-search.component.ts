@@ -15,7 +15,9 @@ export class UnstructuredSearchComponent {
   newUser: User = new User();
   constructor (
     private apiService: ApiService
-  ) {}
+  ) {
+    this.newUser.id = -1;
+  }
 
   editUser(user: User) {
     // to implement
@@ -27,17 +29,21 @@ export class UnstructuredSearchComponent {
 
   addUser() {
     this.apiService.createUser(this.newUser).subscribe((response) => {
-      console.log(response);
-      // if (response.success) {
-      //   this.users.push(this.newUser);
-      //   this.newUser = new User();
-      // } else {
-      //   console.error('Failed to add user:', response.message);
-      // }
+      if (response && response.id !== undefined) {
+        this.users = [...this.users, response];
+        this.newUser.id = -1;
+        this.newUser.name = '';
+        this.newUser.phone = '';
+      } else {
+        console.error('Failed to create user:', response);
+      }
     });
   }
 
   loadSampleDatabase() {
-    // to implement
+    const user1 = new User(0, "Alice", "123");
+    const user2 = new User(1, "Bob", "456");
+    const user3 = new User(2, "Charlie", "789");
+    this.users.push(user1, user2, user3);
   }
 }
