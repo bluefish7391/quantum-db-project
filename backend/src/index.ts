@@ -6,7 +6,7 @@ import { QuantumRouter } from './routers/quantum-router';
 
 const app = express();
 const port = 3000;
-const dbPath = path.join(__dirname, '../../db/quantum.db');
+const dbPath = path.join(__dirname, '../../db/database.db');
 
 app.use(cors());
 app.use(express.json());
