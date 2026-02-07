@@ -3,6 +3,7 @@ import { User } from '../../kinds';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-unstructured-search',
@@ -11,51 +12,23 @@ import { ApiService } from '../api';
   styleUrl: './unstructured-search.component.scss',
 })
 export class UnstructuredSearchComponent {
-  users: User[] = [];
+  users$: Observable<User[]>;
   newUser: User = new User();
-  constructor (
-    private apiService: ApiService
-  ) {
+
+  constructor(private apiService: ApiService) {
     this.newUser.id = -1;
+    this.users$ = this.apiService.getAllUsers();
   }
 
-  ngOnInit() {
-    this.getAllUsers();
-  }
-
-  editUser(user: User) {
-    // to implement
-  }
-
-  deleteUser(id: number) {
-    // to implement
+  getAllUsers() {
+    this.users$ = this.apiService.getAllUsers();
   }
 
   addUser() {
     this.apiService.createUser(this.newUser).subscribe((response) => {
-      if (response && response.id !== -1) {
-        this.users = [...this.users, response];
-        this.newUser.id = -1;
-        this.newUser.name = '';
-        this.newUser.phone = '';
-      } else {
-        console.error('Failed to create user:', response);
-      }
+      this.newUser = new User();
     });
-  }
-
-  getAllUsers() {
-    this.apiService.getAllUsers().subscribe((users) => {
-      console.log('Fetched users:', users);
-      this.users = users;
-    })
-  }
-
-  loadSampleDatabase() {
-    const user1 = new User(0, "Alice", "123");
-    const user2 = new User(1, "Bob", "456");
-    const user3 = new User(2, "Charlie", "789");
-    this.users.push(user1, user2, user3);
+    this.getAllUsers();
   }
 
   clearDatabase() {
@@ -65,5 +38,17 @@ export class UnstructuredSearchComponent {
       }
     });
     this.getAllUsers();
+  }
+
+  loadSampleDatabase() {
+    // TODO: implement this
+  }
+
+  editUser(user: User) {
+    // TODO: implement this
+  }
+
+  deleteUser(userID: number) {
+    // TODO: implement this
   }
 }
