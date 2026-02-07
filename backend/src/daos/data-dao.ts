@@ -41,4 +41,16 @@ export class DataDao {
       }
     );
   }
+
+  public clearUsers(callback: (err: Error | null) => void) {
+    this.db.serialize(() => {
+      this.db.run('DELETE FROM users', (err) => {
+        if (err) return callback(err);
+      });
+  
+      this.db.run("DELETE FROM sqlite_sequence WHERE name='users'", (err) => {
+        callback(err);
+      });
+    });
+  }
 }

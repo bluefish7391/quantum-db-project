@@ -59,6 +59,11 @@ export class UnstructuredSearchComponent {
   }
 
   clearDatabase() {
-    this.users = [];
+    this.apiService.clearUsers().subscribe((response) => {
+      if (!response.success) {
+        console.error('Failed to clear users:', response.message);
+      }
+    });
+    this.getAllUsers();
   }
 }

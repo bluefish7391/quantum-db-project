@@ -34,4 +34,13 @@ export class DataManager {
       });
     });
   }
+
+  public async clearUsers(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.dataDao.clearUsers((err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+  }
 }

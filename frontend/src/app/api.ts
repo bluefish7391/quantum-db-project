@@ -26,4 +26,8 @@ export class ApiService {
   getAllUsers(): Observable<User[]> {
     return this.getResponse<User[]>('data/get-all-users');
   }
+
+  clearUsers(): Observable<ApiResponse> {
+    return this.getResponse<ApiResponse>('data/clear-users');
+  }
 }
