@@ -57,4 +57,8 @@ export class UnstructuredSearchComponent {
     const user3 = new User(2, "Charlie", "789");
     this.users.push(user1, user2, user3);
   }
+
+  clearDatabase() {
+    this.users = [];
+  }
 }
