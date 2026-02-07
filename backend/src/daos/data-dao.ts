@@ -18,14 +18,14 @@ export class DataDao {
           phone TEXT NOT NULL UNIQUE
         )
       `);
-      this.db.get('SELECT COUNT(*) as count FROM your_table', (err, row) => {
+      this.db.get('SELECT COUNT(*) as count FROM users', (err, row) => {
         if (err) return console.error('Error checking table:', err.message);
       });
     });
   }
 
   public getAllUsers(callback: (err: Error | null, rows: any[]) => void) {
-    this.db.all('SELECT * FROM your_table', callback);
+    this.db.all('SELECT * FROM users', callback);
   }
   
   public insertUser(user: User, callback: (err: Error | null, id?: number) => void) {
