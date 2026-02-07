@@ -46,12 +46,23 @@ export class DataRouter extends BaseRouter {
     }
   }
 
+  private async checkNameExists(req: Request, res: Response) {
+    const name = req.params.name as string;
+    try {
+      const exists = await this.dataManager.checkNameExists(name);
+      this.sendNormalResponse(res, exists);
+    } catch (err: any) {
+      this.sendServerErrorResponse(res, { success: false, message: err.message });
+    }
+  }
+
   static buildRouter(dbPath: string): Router {
     const dataRouter = new DataRouter(dbPath);
 
     return express.Router()
       .get('/get-all-users', dataRouter.getAllUsers.bind(dataRouter))
       .post('/create-user', dataRouter.createUser.bind(dataRouter))
-      .get('/clear-users', dataRouter.clearUsers.bind(dataRouter));
+      .get('/clear-users', dataRouter.clearUsers.bind(dataRouter))
+      .get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter));
   }
 }

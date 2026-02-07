@@ -3,7 +3,7 @@ import { User } from '../../kinds';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api';
-import { Observable } from 'rxjs';
+import { concatMap, from, Observable, tap, toArray } from 'rxjs';
 
 @Component({
   selector: 'app-unstructured-search',
@@ -50,5 +50,12 @@ export class UnstructuredSearchComponent {
 
   deleteUser(userID: number) {
     // TODO: implement this
+  }
+
+  checkNameExists() {
+    // TODO: implement UI for this, replace placeholder
+    this.apiService.checkNameExists("Bob").subscribe((exists) => {
+      console.log('Does Bob exist?', exists);
+    });
   }
 }

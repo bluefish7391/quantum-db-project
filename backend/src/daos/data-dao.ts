@@ -53,4 +53,20 @@ export class DataDao {
       });
     });
   }
+
+  public checkNameExists(name: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.db.get(
+        'SELECT COUNT(*) as count FROM users WHERE name = ?',
+        [name],
+        (err, row: { count: number }) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row.count > 0);
+          }
+        }
+      );
+    });
+  }
 }

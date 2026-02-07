@@ -30,4 +30,8 @@ export class ApiService {
   clearUsers(): Observable<ApiResponse> {
     return this.getResponse<ApiResponse>('data/clear-users');
   }
+
+  checkNameExists(name: string): Observable<boolean> {
+    return this.getResponse<boolean>(`data/check-name-exists/${name}`);
+  }
 }

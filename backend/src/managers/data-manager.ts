@@ -43,4 +43,8 @@ export class DataManager {
       });
     });
   }
+
+  public async checkNameExists(name: string): Promise<boolean> {
+    return this.dataDao.checkNameExists(name);
+  }
 }
