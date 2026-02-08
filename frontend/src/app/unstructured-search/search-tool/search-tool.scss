@@ -13,9 +13,26 @@ $hover-bg: #f8fafc;
     background-color: $light-blue;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    h3 {
+    h2 {
         margin-bottom: 1rem;
         color: $primary-blue;
+    }
+
+    .info-section {
+        margin-bottom: 1.5rem;
+        color: $gray-text;
+        font-size: 0.8rem;
+
+        .info-link {
+            display: inline;
+            color: $primary-blue;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
     }
 
     form {

@@ -1,5 +1,9 @@
 <div class="search-box">
-    <h3>Search User by Name</h3>
+    <h2>Search Tool</h2>
+    <section class="info-section">
+        Search users by name, performing the usual linear search classically
+        and also determining the result by Grover's algorithm. <span class="info-link">Learn more</span>
+    </section>
     <form (ngSubmit)="searchUser()">
         <label for="search-name">Name:</label>
         <input type="text" id="search-name" [(ngModel)]="searchName" name="search-name" required>
