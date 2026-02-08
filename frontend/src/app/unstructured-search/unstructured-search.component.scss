@@ -1,21 +1,18 @@
 @use 'sass:color';
 
-:host {
-    display: block;
-    padding: 24px;
-    background-color: #ffffff;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
 $primary-blue: #005abb;
 $light-blue: #e6f0ff;
 $gray-text: #4a5568;
 $border-color: #e2e8f0;
 $hover-bg: #f8fafc;
+
+:host {
+    display: block;
+    background-color: #ffffff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
 h2 {
     font-size: 1.5rem;
@@ -126,12 +123,15 @@ button+button {
     flex-wrap: wrap;
 
     .left-column {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 24px;
         flex: 2;
-        min-width: 300px;
+        min-width: 600px;
     }
 
     .right-column {
         flex: 1;
-        min-width: 250px;
+        min-width: 300px;
     }
 }

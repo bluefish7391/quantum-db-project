@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SearchTool {
   searchName = '';
-  searchResult: number | undefined;
+  searchResult: number | undefined = 2;
   constructor(private apiService: ApiService) { }
 
   searchUser() {

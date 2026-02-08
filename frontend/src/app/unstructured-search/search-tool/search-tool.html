@@ -6,4 +6,13 @@
 
         <button type="submit">Search</button>
     </form>
+
+    <div class="result" *ngIf="searchResult !== undefined">
+        <p *ngIf="searchResult; else notFound">
+            User ID: {{ searchResult }}
+        </p>
+        <ng-template #notFound>
+            <p>Not found</p>
+        </ng-template>
+    </div>
 </div>
