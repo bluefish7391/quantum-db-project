@@ -14,7 +14,7 @@ quantum/__pycache__/
 *.pyo
 
 # Database and env
-db/quantum.db
+db/database.db
 .env
 
 # Misc
