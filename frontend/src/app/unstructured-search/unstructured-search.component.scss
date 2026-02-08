@@ -1,4 +1,3 @@
-
 @use 'sass:color';
 
 :host {
@@ -11,12 +10,12 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
-  
-  $primary-blue: #005abb;
-  $light-blue: #e6f0ff;
-  $gray-text: #4a5568;
-  $border-color: #e2e8f0;
-  $hover-bg: #f8fafc;
+
+$primary-blue: #005abb;
+$light-blue: #e6f0ff;
+$gray-text: #4a5568;
+$border-color: #e2e8f0;
+$hover-bg: #f8fafc;
 
 h2 {
     font-size: 1.5rem;
@@ -119,4 +118,20 @@ button:hover {
 
 button+button {
     margin-left: 8px;
+}
+
+.container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    .left-column {
+        flex: 2;
+        min-width: 300px;
+    }
+
+    .right-column {
+        flex: 1;
+        min-width: 250px;
+    }
 }

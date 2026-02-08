@@ -1,0 +1,9 @@
+<div class="search-box">
+    <h3>Search User by Name</h3>
+    <form (ngSubmit)="searchUser()">
+        <label for="search-name">Name:</label>
+        <input type="text" id="search-name" [(ngModel)]="searchName" name="search-name" required>
+
+        <button type="submit">Search</button>
+    </form>
+</div>

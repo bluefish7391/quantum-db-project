@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api';
 import { concatMap, from, Observable, tap, toArray } from 'rxjs';
+import { SearchTool } from './search-tool/search-tool';
 
 @Component({
   selector: 'app-unstructured-search',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SearchTool],
   templateUrl: './unstructured-search.component.html',
   styleUrl: './unstructured-search.component.scss',
 })
