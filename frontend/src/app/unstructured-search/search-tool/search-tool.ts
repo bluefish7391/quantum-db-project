@@ -18,8 +18,8 @@ export class SearchTool {
   ) { }
 
   searchUser() {
-    this.apiService.checkNameExists(this.searchName).subscribe((exists) => {
-      this.searchResult = exists ? 1 : 0;
+    this.apiService.getIDByName(this.searchName).subscribe((id) => {
+      this.searchResult = id;
       this.cdr.detectChanges(); // TODO: figure out why this is needed to update the UI, maybe related to change detection strategy
     });
   }

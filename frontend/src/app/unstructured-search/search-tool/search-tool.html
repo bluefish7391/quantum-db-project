@@ -8,7 +8,7 @@
     </form>
 
     <div class="result" *ngIf="searchResult !== undefined">
-        <p *ngIf="searchResult; else notFound">
+        <p *ngIf="searchResult > 0; else notFound">
             User ID: {{ searchResult }}
         </p>
         <ng-template #notFound>

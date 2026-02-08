@@ -69,4 +69,24 @@ export class DataDao {
       );
     });
   }
+
+  public getIDbyName(name: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.db.get(
+        'SELECT id FROM users WHERE name = ?',
+        [name],
+        (err, row: { id: number }) => {
+          if (err) {
+            reject(err);
+          } else {
+            if (row) {
+              resolve(row.id);
+            } else {
+              resolve(-1);
+            }
+          }
+        }
+      );
+    });
+  }
 }

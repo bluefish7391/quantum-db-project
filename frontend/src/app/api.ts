@@ -34,4 +34,8 @@ export class ApiService {
   checkNameExists(name: string): Observable<boolean> {
     return this.getResponse<boolean>(`data/check-name-exists/${name}`);
   }
+
+  getIDByName(name: string): Observable<number> {
+    return this.getResponse<number>(`data/get-id-by-name/${name}`);
+  }
 }

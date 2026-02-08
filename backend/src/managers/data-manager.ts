@@ -47,4 +47,8 @@ export class DataManager {
   public async checkNameExists(name: string): Promise<boolean> {
     return this.dataDao.checkNameExists(name);
   }
+
+  public async getIDByName(name: string): Promise<number> {
+    return this.dataDao.getIDbyName(name);
+  }
 }
