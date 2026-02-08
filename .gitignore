@@ -1,22 +1,52 @@
-# Node.js
+# --- System & OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- Node / General Logs ---
 node_modules/
 npm-debug.log
-backend/dist/
+yarn-error.log
+*.log
+/connect.lock
+testem.log
 
-# Angular
+# --- Frontend (Consolidated from /frontend) ---
 frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
 frontend/node_modules/
+frontend/.angular/cache/
+frontend/.sass-cache/
+frontend/coverage/
+frontend/typings/
+frontend/__screenshots__/
+frontend/libpeerconnection.log
 
-# Python/Qiskit
+# --- Backend & Other Services ---
+backend/dist/
 quantum/venv/
 quantum/__pycache__/
 *.pyc
 *.pyo
 
-# Database and env
+# --- Database & Environment ---
 db/database.db
 .env
 
-# Misc
-*.log
-.DS_Store
+# --- IDEs and Editors ---
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/*
+
+# VS Code specific
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
