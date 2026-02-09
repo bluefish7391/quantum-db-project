@@ -20,7 +20,7 @@
                         <td>{{ user.name }}</td>
                         <td>{{ user.phone }}</td>
                         <td>
-                            <button (click)="editUser(user)">Edit</button>
+                            <button (click)="upsertUser(user)">Edit</button>
                             <button (click)="deleteUser(user.id)">Delete</button>
                         </td>
                     </tr>
@@ -29,7 +29,7 @@
         </ng-container>
 
         <h3>Add New User</h3>
-        <form (ngSubmit)="addUser()">
+        <form (ngSubmit)="upsertUser()">
             <label for="name">Name:</label>
             <input type="text" id="name" [(ngModel)]="newUser.name" name="name" required>
 

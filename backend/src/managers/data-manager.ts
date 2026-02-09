@@ -26,12 +26,19 @@ export class DataManager {
 		});
 	}
 
-	public async createUser(user: User): Promise<number> {
+	public async upsertUser(user: User): Promise<number> {
 		return new Promise((resolve, reject) => {
-			this.dataDao.insertUser(user, (err, id) => {
-				if (err) reject(err);
-				else resolve(id!);
-			});
+			if (user.id > 0) {
+				this.dataDao.updateUser(user, (err) => {
+					if (err) reject(err);
+					else resolve(user.id);
+				});
+			} else {
+				this.dataDao.insertUser(user, (err, id) => {
+					if (err) reject(err);
+					else resolve(id!);
+				});
+			}
 		});
 	}
 

@@ -28,8 +28,8 @@ export class UnstructuredSearchComponent {
 		this.users$ = this.apiService.getAllUsers();
 	}
 	
-	addUser() {
-		this.apiService.createUser(this.newUser).subscribe((response) => {
+	upsertUser(user?: User) {
+		this.apiService.upsertUser(user == undefined ? this.newUser : new User(1, "Golden Dandelion", "666777")).subscribe((response) => {
 			this.newUser = new User();
 		});
 		this.getAllUsers();
@@ -60,7 +60,7 @@ export class UnstructuredSearchComponent {
 	  
 		this.apiService.clearUsers().pipe(
 		  concatMap(() => from(sampleUsers).pipe(
-			concatMap(user => this.apiService.createUser(user))
+			concatMap(user => this.apiService.upsertUser(user))
 		  )),
 		  toArray(),
 		  tap(() => {

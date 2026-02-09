@@ -19,7 +19,7 @@ export class DataRouter extends BaseRouter {
 		}
 	}
 
-	private async createUser(req: Request, res: Response) {
+	private async upsertUser(req: Request, res: Response) {
 		const user = req.body as User;
 		if (!user.name || !user.phone) {
 			const apiResponse = new ApiResponse();
@@ -30,7 +30,7 @@ export class DataRouter extends BaseRouter {
 			return;
 		}
 		try {
-			user.id = await this.dataManager.createUser(user);
+			user.id = await this.dataManager.upsertUser(user);
 			this.sendNormalResponse(res, user);
 		} catch (err: any) {
 			this.sendServerErrorResponse(res, { success: false, message: err.message });
@@ -71,7 +71,7 @@ export class DataRouter extends BaseRouter {
 
 		return express.Router()
 			.get('/get-all-users', dataRouter.getAllUsers.bind(dataRouter))
-			.post('/create-user', dataRouter.createUser.bind(dataRouter))
+			.post('/upsert-user', dataRouter.upsertUser.bind(dataRouter))
 			.get('/clear-users', dataRouter.clearUsers.bind(dataRouter))
 			.get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter))
 			.get('/get-id-by-name/:name', dataRouter.getIDbyName.bind(dataRouter));

@@ -19,8 +19,8 @@ export class ApiService {
 		return this.http.post<T>(`${this.apiUrl}/${endpoint}`, data);
 	}
 
-	createUser(user: User): Observable<User> {
-		return this.postResponse<User>('data/create-user', user);
+	upsertUser(user: User): Observable<User> {
+		return this.postResponse<User>('data/upsert-user', user);
 	}
 
 	getAllUsers(): Observable<User[]> {

@@ -42,6 +42,14 @@ export class DataDao {
 		);
 	}
 
+	public updateUser(user: User, callback: (err: Error | null) => void) {
+		this.db.run(
+			'UPDATE users SET name = ?, phone = ? WHERE id = ?',
+			[user.name, user.phone, user.id],
+			callback
+		);
+	}
+
 	public clearUsers(callback: (err: Error | null) => void) {
 		this.db.serialize(() => {
 			this.db.run('DELETE FROM users', (err) => {
