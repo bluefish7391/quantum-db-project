@@ -20,8 +20,8 @@
                         <td>{{ user.name }}</td>
                         <td>{{ user.phone }}</td>
                         <td>
-                            <button (click)="upsertUser(user)">Edit</button>
-                            <button (click)="deleteUser(user.id)">Delete</button>
+                            <button (click)="onEditClick(user)">Edit</button>
+                            <button (click)="onDeleteClick(user.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
