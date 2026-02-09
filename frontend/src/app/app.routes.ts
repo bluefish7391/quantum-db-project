@@ -4,8 +4,8 @@ import { UnstructuredSearchComponent } from './unstructured-search/unstructured-
 import { ResultsComponent } from './results/results.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'query', component: UnstructuredSearchComponent },
-  { path: 'results', component: ResultsComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+	{ path: '', component: HomeComponent },
+	{ path: 'query', component: UnstructuredSearchComponent },
+	{ path: 'results', component: ResultsComponent },
+	{ path: '**', redirectTo: '', pathMatch: 'full' }
 ];
