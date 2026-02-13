@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api';
 import { concatMap, from, Observable, tap, toArray } from 'rxjs';
 import { SearchTool } from './search-tool/search-tool';
+import { GraphView } from './graph-view/graph-view';
 
 @Component({
 	selector: 'app-unstructured-search',
-	imports: [CommonModule, FormsModule, SearchTool],
+	imports: [CommonModule, FormsModule, SearchTool, GraphView],
 	templateUrl: './unstructured-search.component.html',
 	styleUrl: './unstructured-search.component.scss',
 })
