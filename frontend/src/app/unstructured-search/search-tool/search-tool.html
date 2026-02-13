@@ -19,4 +19,15 @@
             <p>Not found</p>
         </ng-template>
     </div>
+
+	<div class="result" *ngIf="searchResult !== undefined">
+		<b>Performance Summary:</b>
+		<ul class="performance-stats">
+			<li>Classical Search Time: [] ms</li>
+			<li>Grover's Algorithm Time: [] ms</li>
+		</ul>
+		<br>
+		<b>Breakdown:</b>
+		<p><i>TBA</i></p>
+    </div>
 </div>
