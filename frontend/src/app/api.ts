@@ -11,6 +11,10 @@ export class ApiService {
 
 	constructor(private http: HttpClient) { }
 
+	// ===============================================================
+	// Generic API Methods
+	// ===============================================================
+
 	getResponse<T>(endpoint: string): Observable<T> {
 		return this.http.get<T>(`${this.apiUrl}/${endpoint}`);
 	}
@@ -18,6 +22,10 @@ export class ApiService {
 	postResponse<T>(endpoint: string, data: any): Observable<T> {
 		return this.http.post<T>(`${this.apiUrl}/${endpoint}`, data);
 	}
+
+	// ===============================================================
+	// Core Classical Database Operations
+	// ===============================================================
 
 	upsertUser(user: User): Observable<User> {
 		return this.postResponse<User>('data/upsert-user', user);
@@ -34,6 +42,14 @@ export class ApiService {
 	checkNameExists(name: string): Observable<boolean> {
 		return this.getResponse<boolean>(`data/check-name-exists/${name}`);
 	}
+
+	deleteUser(id: number): Observable<ApiResponse> {
+		return this.http.delete<ApiResponse>(`${this.apiUrl}/data/delete-user/${id}`);
+	}
+
+	// ===============================================================
+	// Complex Operations
+	// ==============================================================
 
 	getIDByName(name: string): Observable<number> {
 		return this.getResponse<number>(`data/get-id-by-name/${name}`);
