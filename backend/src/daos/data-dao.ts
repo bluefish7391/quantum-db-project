@@ -97,4 +97,18 @@ export class DataDao {
 			);
 		});
 	}
+
+	public deleteUser(id: number, callback: (err: Error | null, response?: any) => void) {
+		this.db.run('DELETE FROM users WHERE id = ?', [id], function (err) {
+			if (err) {
+				callback(err);
+			} else {
+				if (this.changes > 0) {
+					callback(null, { success: true, message: 'User deleted' });
+				} else {
+					callback(null, { success: false, message: 'User not found' });
+				}
+			}
+		});
+	}
 }

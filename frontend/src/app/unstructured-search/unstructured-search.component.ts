@@ -90,6 +90,11 @@ export class UnstructuredSearchComponent {
 	}
 
 	onDeleteClick(userID: number) {
-		// TODO: implement this
+		this.apiService.deleteUser(userID).subscribe((response) => {
+			if (!response.success) {
+				console.error('Failed to clear users:', response.message);
+			}
+		});
+		this.getAllUsers();
 	}
 }

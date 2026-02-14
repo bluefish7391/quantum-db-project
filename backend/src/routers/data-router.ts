@@ -66,6 +66,16 @@ export class DataRouter extends BaseRouter {
 		}
 	}
 
+	private async deleteUser(req: Request, res: Response) {
+		const id = Number(req.params.id as string);
+		try {
+			const response = await this.dataManager.deleteUser(id);
+			this.sendNormalResponse(res, response);
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
 	static buildRouter(dbPath: string): Router {
 		const dataRouter = new DataRouter(dbPath);
 
@@ -74,6 +84,7 @@ export class DataRouter extends BaseRouter {
 			.post('/upsert-user', dataRouter.upsertUser.bind(dataRouter))
 			.get('/clear-users', dataRouter.clearUsers.bind(dataRouter))
 			.get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter))
-			.get('/get-id-by-name/:name', dataRouter.getIDbyName.bind(dataRouter));
+			.get('/get-id-by-name/:name', dataRouter.getIDbyName.bind(dataRouter))
+			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter));
 	}
 }
