@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms';
 export class SearchTool {
   searchName = '';
   searchResult: number | undefined;
+  useClassical = true;
+  useQuantum = true;
+  
   constructor(
     private apiService: ApiService,
     private cdr: ChangeDetectorRef

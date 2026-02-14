@@ -4,6 +4,22 @@
         Search users by name, performing the usual linear search classically
         and also determining the result by Grover's algorithm. <span class="info-link">Learn more</span>
     </section>
+
+	<div class="configuration">
+		<h3>Configuration</h3>
+		<!--Add one checkbox to toggle whether to use quantum algorithms or not and another for whether to use classical-->
+		<div class="checkbox-group">
+			<label>
+				<input type="checkbox" [(ngModel)]="useClassical" name="use-classical">
+				Use Classical Search
+			</label>
+			<label>
+				<input type="checkbox" [(ngModel)]="useQuantum" name="use-quantum">
+				Use Quantum Search
+			</label>
+		</div>
+	</div>
+
     <form (ngSubmit)="searchUser()">
         <label for="search-name">Name:</label>
         <input type="text" id="search-name" [(ngModel)]="searchName" name="search-name" required>
