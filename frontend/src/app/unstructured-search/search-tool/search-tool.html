@@ -27,13 +27,23 @@
     </form>
 
     <div class="result" *ngIf="searchResult !== null">
-        <p *ngIf="searchResult.id != undefined; else notFound">
-            User ID: {{ searchResult.id }}
+        <p *ngIf="searchResult.classicIDReported != undefined; else notFound">
+            (Classically Result) User ID: {{ searchResult.classicIDReported }}
         </p>
         <ng-template #notFound>
-            <p>Not found</p>
+            <p>(Classical Result) Not found</p>
         </ng-template>
     </div>
+
+	<div class="result" *ngIf="searchResult !== null">
+        <p *ngIf="searchResult.quantumIDReported != undefined; else notFound">
+            (Grover's Algorithm Result) User ID: {{ searchResult.quantumIDReported }}
+        </p>
+        <ng-template #notFound>
+            <p>(Grover's Algorithm Result) Not found</p>
+        </ng-template>
+    </div>
+
 
 	<div class="result" *ngIf="searchResult !== null">
 		<b>Performance Summary:</b>

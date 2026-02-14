@@ -23,7 +23,10 @@ export class UnstructuredSearchRequest {
 }
 
 export class UnstructuredSearchResponse extends ApiResponse {
+	static NO_METHOD_SELECTED_MESSAGE = 'Please select at least one method (classical or quantum)';
+
 	totalClassicalTime: number | undefined;
 	totalQuantumTime: number | undefined;
-	id: number | undefined;
+	classicIDReported: number | undefined;
+	quantumIDReported: number | undefined;
 }

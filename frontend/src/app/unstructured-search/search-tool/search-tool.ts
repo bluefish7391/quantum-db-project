@@ -28,8 +28,6 @@ export class SearchTool {
 		unstructuredSearchRequest.name = this.searchName;
 
 		this.apiService.getIDByName(unstructuredSearchRequest).subscribe((searchResponse) => {
-			console.log("searchResponse=", searchResponse);
-
 			if (!searchResponse.success) {
 				console.log(`Search failed: ${searchResponse.message}`);
 				return;

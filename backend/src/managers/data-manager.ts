@@ -57,16 +57,24 @@ export class DataManager {
 
 	public async getIDByName(request: UnstructuredSearchRequest): Promise<UnstructuredSearchResponse> {
 		try {
-			const start = performance.now();
-			const id = await this.dataDao.getIDByName(request.name);
-			const end = performance.now();
-
 			const response = new UnstructuredSearchResponse();
-			response.success = true;
-			response.message = id == undefined ? 'ID not found' : 'ID found';
-			response.totalClassicalTime = end - start;
-			response.id = id;
 
+			if (!request.useClassical && !request.useQuantum) {
+				response.success = false;
+				response.message = UnstructuredSearchResponse.NO_METHOD_SELECTED_MESSAGE;
+				return response;
+			}
+
+			if (request.useClassical) {
+				const start = performance.now();
+				const id = await this.dataDao.getIDByName(request.name);
+				const end = performance.now();
+
+				response.totalClassicalTime = end - start;
+				response.classicIDReported = id;
+			}
+
+			response.success = true;
 			return response;
 		} catch (err) {
 			throw err;
