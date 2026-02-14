@@ -1,0 +1,33 @@
+<div class="search-box">
+    <h2>Search Tool</h2>
+    <section class="info-section">
+        Search users by name, performing the usual linear search classically
+        and also determining the result by Grover's algorithm. <span class="info-link">Learn more</span>
+    </section>
+    <form (ngSubmit)="searchUser()">
+        <label for="search-name">Name:</label>
+        <input type="text" id="search-name" [(ngModel)]="searchName" name="search-name" required>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="result" *ngIf="searchResult !== undefined">
+        <p *ngIf="searchResult > 0; else notFound">
+            User ID: {{ searchResult }}
+        </p>
+        <ng-template #notFound>
+            <p>Not found</p>
+        </ng-template>
+    </div>
+
+	<div class="result" *ngIf="searchResult !== undefined">
+		<b>Performance Summary:</b>
+		<ul class="performance-stats">
+			<li>Classical Search Time: [] ms</li>
+			<li>Grover's Algorithm Time: [] ms</li>
+		</ul>
+		<br>
+		<b>Breakdown:</b>
+		<p><i>TBA</i></p>
+    </div>
+</div>

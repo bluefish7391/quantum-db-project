@@ -1,41 +1,53 @@
-<div>
-    <h2>User Database</h2>
-    <div *ngIf="users.length === 0" class="no-data">
-        No data available. The table will appear here when data is added.
-    </div>
-    <table *ngIf="users.length > 0">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let user of users">
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.phone }}</td>
-            <td>
-            <button (click)="editUser(user)">Edit</button>
-            <button (click)="deleteUser(user.id)">Delete</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    
-    <h3>Add New User</h3>
-    <form (ngSubmit)="addUser()">
-        <label for="name">Name:</label>
-        <input type="text" id="name" [(ngModel)]="newUser.name" name="name" required>
-    
-        <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" [(ngModel)]="newUser.phone" name="phone" required>
-    
-        <button type="submit">Add User</button>
-    </form>
+<div class="container">
+    <div class="left-column column">
+        <h2>User Database</h2>
+        <ng-container *ngIf="users$ | async as users">
+            <div *ngIf="users.length === 0" class="no-data">
+                No data available. The table will appear here when data is added.
+            </div>
+            <table *ngIf="users.length > 0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>
+                            <button (click)="onEditClick(user)">Edit</button>
+                            <button (click)="onDeleteClick(user.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
 
-    <button (click)="loadSampleDatabase()">Load Sample Database</button>
-    <button (click)="clearDatabase()">Clear Database</button>
+        <h3>Add New User</h3>
+        <form (ngSubmit)="upsertUser()">
+            <label for="name">Name:</label>
+            <input type="text" id="name" [(ngModel)]="newUser.name" name="name" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" [(ngModel)]="newUser.phone" name="phone" required>
+
+            <button type="submit">Add User</button>
+        </form>
+
+        <button (click)="loadSampleDatabase()">Load Sample Database</button>
+        <button (click)="clearDatabase()">Clear Database</button>
+    </div>
+
+    <div class="middle-column column">
+        <app-search-tool></app-search-tool>
+    </div>
+
+	<div class="right-column column">
+		<app-graph-view></app-graph-view>
+	</div>
 </div>

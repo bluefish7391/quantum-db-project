@@ -11,9 +11,9 @@ const dbPath = path.join(__dirname, '../../db/database.db');
 app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.set('Expires', '0');
-  next();
+	res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+	res.set('Expires', '0');
+	next();
 });
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
