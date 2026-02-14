@@ -78,7 +78,7 @@ export class DataDao {
 		});
 	}
 
-	public getIDByName(name: string): Promise<number> {
+	public getIDByName(name: string): Promise<number | undefined> {
 		return new Promise((resolve, reject) => {
 			this.db.get(
 				'SELECT id FROM users WHERE name = ?',
@@ -90,7 +90,7 @@ export class DataDao {
 						if (row) {
 							resolve(row.id);
 						} else {
-							resolve(-1);
+							resolve(undefined);
 						}
 					}
 				}

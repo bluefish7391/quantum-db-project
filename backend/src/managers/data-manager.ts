@@ -63,7 +63,7 @@ export class DataManager {
 
 			const response = new UnstructuredSearchResponse();
 			response.success = true;
-			response.message = id >= 0 ? 'ID found' : 'ID not found';
+			response.message = id == undefined ? 'ID not found' : 'ID found';
 			response.totalClassicalTime = end - start;
 			response.id = id;
 

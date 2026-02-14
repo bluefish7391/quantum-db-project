@@ -7,7 +7,6 @@
 
 	<div class="configuration">
 		<h3>Configuration</h3>
-		<!--Add one checkbox to toggle whether to use quantum algorithms or not and another for whether to use classical-->
 		<div class="checkbox-group">
 			<label>
 				<input type="checkbox" [(ngModel)]="useClassical" name="use-classical">
@@ -28,7 +27,7 @@
     </form>
 
     <div class="result" *ngIf="searchResult !== null">
-        <p *ngIf="searchResult.id != undefined && searchResult.id > 0; else notFound">
+        <p *ngIf="searchResult.id != undefined; else notFound">
             User ID: {{ searchResult.id }}
         </p>
         <ng-template #notFound>
