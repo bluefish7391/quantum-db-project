@@ -15,3 +15,13 @@ export class ApiResponse {
 	success = false;
 	message = '';
 }
+
+export class UnstructuredSearchRequest {
+	useClassical: boolean = false;
+	useQuantum: boolean = false;
+}
+
+export class UnstructuredSearchResponse extends ApiResponse {
+	totalClassicalTime: number | undefined;
+	totalQuantumTime: number | undefined;
+}
