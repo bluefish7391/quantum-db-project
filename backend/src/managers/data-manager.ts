@@ -1,4 +1,4 @@
-import { ApiResponse, User } from '../../../frontend/src/kinds';
+import { ApiResponse, UnstructuredSearchRequest, UnstructuredSearchResponse, User } from '../../../frontend/src/kinds';
 import { DataDao } from '../daos/data-dao';
 
 export class DataManager {
@@ -55,8 +55,22 @@ export class DataManager {
 		return this.dataDao.checkNameExists(name);
 	}
 
-	public async getIDByName(name: string): Promise<number> {
-		return this.dataDao.getIDbyName(name);
+	public async getIDByName(request: UnstructuredSearchRequest): Promise<UnstructuredSearchResponse> {
+		try {
+			const start = performance.now();
+			const id = await this.dataDao.getIDByName(request.name);
+			const end = performance.now();
+
+			const response = new UnstructuredSearchResponse();
+			response.success = true;
+			response.message = id >= 0 ? 'ID found' : 'ID not found';
+			response.totalClassicalTime = end - start;
+			response.id = id;
+
+			return response;
+		} catch (err) {
+			throw err;
+		}
 	}
 
 	public async deleteUser(id: number): Promise<ApiResponse> {

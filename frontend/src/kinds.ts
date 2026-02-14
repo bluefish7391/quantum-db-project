@@ -19,9 +19,11 @@ export class ApiResponse {
 export class UnstructuredSearchRequest {
 	useClassical: boolean = false;
 	useQuantum: boolean = false;
+	name: string = '';
 }
 
 export class UnstructuredSearchResponse extends ApiResponse {
 	totalClassicalTime: number | undefined;
 	totalQuantumTime: number | undefined;
+	id: number | undefined;
 }

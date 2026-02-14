@@ -78,7 +78,7 @@ export class DataDao {
 		});
 	}
 
-	public getIDbyName(name: string): Promise<number> {
+	public getIDByName(name: string): Promise<number> {
 		return new Promise((resolve, reject) => {
 			this.db.get(
 				'SELECT id FROM users WHERE name = ?',

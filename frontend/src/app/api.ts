@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse, User } from '../kinds';
+import { ApiResponse, UnstructuredSearchRequest, UnstructuredSearchResponse, User } from '../kinds';
 
 @Injectable({
 	providedIn: 'root'
@@ -51,7 +51,7 @@ export class ApiService {
 	// Complex Operations
 	// ==============================================================
 
-	getIDByName(name: string): Observable<number> {
-		return this.getResponse<number>(`data/get-id-by-name/${name}`);
+	getIDByName(unstructuredSearchRequest: UnstructuredSearchRequest): Observable<UnstructuredSearchResponse> {
+		return this.postResponse<UnstructuredSearchResponse>(`data/get-id-by-name`, unstructuredSearchRequest);
 	}
 }

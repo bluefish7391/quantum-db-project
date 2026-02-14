@@ -27,19 +27,19 @@
         <button type="submit">Search</button>
     </form>
 
-    <div class="result" *ngIf="searchResult !== undefined">
-        <p *ngIf="searchResult > 0; else notFound">
-            User ID: {{ searchResult }}
+    <div class="result" *ngIf="searchResult !== null">
+        <p *ngIf="searchResult.id != undefined && searchResult.id > 0; else notFound">
+            User ID: {{ searchResult.id }}
         </p>
         <ng-template #notFound>
             <p>Not found</p>
         </ng-template>
     </div>
 
-	<div class="result" *ngIf="searchResult !== undefined">
+	<div class="result" *ngIf="searchResult !== null">
 		<b>Performance Summary:</b>
 		<ul class="performance-stats">
-			<li>Classical Search Time: [] ms</li>
+			<li>Classical Search Time: {{ searchResult.totalClassicalTime }} ms</li>
 			<li>Grover's Algorithm Time: [] ms</li>
 		</ul>
 		<br>

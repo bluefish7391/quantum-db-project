@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { DataManager } from '../managers/data-manager';
-import { ApiResponse, User } from '../../../frontend/src/kinds';
+import { ApiResponse, UnstructuredSearchRequest, User } from '../../../frontend/src/kinds';
 import { BaseRouter } from './base-router';
 
 export class DataRouter extends BaseRouter {
@@ -57,9 +57,9 @@ export class DataRouter extends BaseRouter {
 	}
 
 	private async getIDbyName(req: Request, res: Response) {
-		const name = req.params.name as string;
+		const request = req.body as UnstructuredSearchRequest;
 		try {
-			const id = await this.dataManager.getIDByName(name);
+			const id = await this.dataManager.getIDByName(request);
 			this.sendNormalResponse(res, id);
 		} catch (err: any) {
 			this.sendServerErrorResponse(res, { success: false, message: err.message });
@@ -84,7 +84,7 @@ export class DataRouter extends BaseRouter {
 			.post('/upsert-user', dataRouter.upsertUser.bind(dataRouter))
 			.get('/clear-users', dataRouter.clearUsers.bind(dataRouter))
 			.get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter))
-			.get('/get-id-by-name/:name', dataRouter.getIDbyName.bind(dataRouter))
+			.post('/get-id-by-name', dataRouter.getIDbyName.bind(dataRouter))
 			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter));
 	}
 }
