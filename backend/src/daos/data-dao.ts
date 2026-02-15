@@ -111,4 +111,23 @@ export class DataDao {
 			}
 		});
 	}
+
+	public getPaginatedUsers(page: number, size: number): Promise<any[]> {
+		return new Promise((resolve, reject) => {
+			const offset = (page - 1) * size;
+			this.db.all('SELECT * FROM users LIMIT ? OFFSET ?', [size, offset], (err, rows) => {
+				if (err) return reject(err);
+				resolve(rows);
+			});
+		});
+	}
+
+	public getTotalUserCount(): Promise<number> {
+		return new Promise((resolve, reject) => {
+			this.db.get('SELECT COUNT(*) as count FROM users', (err, row: { count: number }) => {
+				if (err) return reject(err);
+				resolve(row.count);
+			});
+		});
+	}
 }

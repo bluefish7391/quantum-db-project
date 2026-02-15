@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { DataManager } from '../managers/data-manager';
-import { ApiResponse, UnstructuredSearchRequest, User } from '../../../frontend/src/kinds';
+import { ApiResponse, GetUsersRequest, UnstructuredSearchRequest, User } from '../../../frontend/src/kinds';
 import { BaseRouter } from './base-router';
 
 export class DataRouter extends BaseRouter {
@@ -76,6 +76,16 @@ export class DataRouter extends BaseRouter {
 		}
 	}
 
+	private async getPaginatedUsers(req: Request, res: Response) {
+		const request = req.body as GetUsersRequest;
+		try {
+			const data = await this.dataManager.getPaginatedUsers(request.page, request.pageSize);
+			this.sendNormalResponse(res, data);
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
 	static buildRouter(dbPath: string): Router {
 		const dataRouter = new DataRouter(dbPath);
 
@@ -85,6 +95,7 @@ export class DataRouter extends BaseRouter {
 			.get('/clear-users', dataRouter.clearUsers.bind(dataRouter))
 			.get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter))
 			.post('/get-id-by-name', dataRouter.getIDbyName.bind(dataRouter))
-			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter));
+			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter))
+			.post('/get-paginated-users', dataRouter.getPaginatedUsers.bind(dataRouter));
 	}
 }

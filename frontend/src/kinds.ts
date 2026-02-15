@@ -11,6 +11,16 @@ export class User {
 	}
 }
 
+export class DatabasePage {
+	users: User[] = [];
+	totalUserCount: number = 0;
+}
+
+export class GetUsersRequest {
+	page: number = 1;
+	pageSize: number = 10;
+}
+
 export class ApiResponse {
 	success = false;
 	message = '';
