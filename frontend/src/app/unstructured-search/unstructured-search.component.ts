@@ -1,29 +1,50 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { User } from '../../kinds';
+import { GetUsersRequest, User } from '../../kinds';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api';
-import { concatMap, from, Observable, tap, toArray } from 'rxjs';
+import { concatMap, from, map, Observable, tap, toArray } from 'rxjs';
 import { SearchTool } from './search-tool/search-tool';
 import { GraphView } from './graph-view/graph-view';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
 	selector: 'app-unstructured-search',
-	imports: [CommonModule, FormsModule, SearchTool, GraphView],
+	imports: [CommonModule, MatPaginator, FormsModule, SearchTool, GraphView],
 	templateUrl: './unstructured-search.component.html',
 	styleUrl: './unstructured-search.component.scss',
 })
 export class UnstructuredSearchComponent {
-	users$: Observable<User[]>;
+	users$!: Observable<User[]>;
 	newUser: User = new User();
+	totalUsers = 0;
+	pageSize = 10;
+	pageIndex = 0;
 
 	constructor(
 		private apiService: ApiService,
 		private cdr: ChangeDetectorRef
 	) {
 		this.newUser.id = -1;
-		this.users$ = this.apiService.getAllUsers();
+		this.loadUsers();
 	}
+
+	private loadUsers() {
+		const getUsersRequest = new GetUsersRequest();
+		getUsersRequest.page = this.pageIndex + 1;
+		getUsersRequest.pageSize = this.pageSize;
+
+		this.users$ = this.apiService.getUsers(getUsersRequest).pipe(
+			tap(response => this.totalUsers = response.totalUserCount),
+			map(response => response.users)
+		);
+	}
+
+	onPageChange(event: PageEvent) {
+		this.pageIndex = event.pageIndex;
+		this.pageSize = event.pageSize;
+		this.loadUsers();
+	  }
 
 	getAllUsers() {
 		this.users$ = this.apiService.getAllUsers();
@@ -33,7 +54,7 @@ export class UnstructuredSearchComponent {
 		this.apiService.upsertUser(user == undefined ? this.newUser : user).subscribe((response) => {
 			this.newUser = new User();
 		});
-		this.getAllUsers();
+		this.loadUsers();
 	}
 
 	onEditClick(user: User) {
@@ -52,7 +73,7 @@ export class UnstructuredSearchComponent {
 				console.error('Failed to clear users:', response.message);
 			}
 		});
-		this.getAllUsers();
+		this.loadUsers();
 	}
 
 	loadSampleDatabase() {
@@ -95,6 +116,6 @@ export class UnstructuredSearchComponent {
 				console.error('Failed to clear users:', response.message);
 			}
 		});
-		this.getAllUsers();
+		this.loadUsers();
 	}
 }

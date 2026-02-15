@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse, UnstructuredSearchRequest, UnstructuredSearchResponse, User } from '../kinds';
+import { ApiResponse, DatabasePage, GetUsersRequest, UnstructuredSearchRequest, UnstructuredSearchResponse, User } from '../kinds';
 
 @Injectable({
 	providedIn: 'root'
@@ -33,6 +33,10 @@ export class ApiService {
 
 	getAllUsers(): Observable<User[]> {
 		return this.getResponse<User[]>('data/get-all-users');
+	}
+
+	getUsers(getUsersRequest: GetUsersRequest): Observable<DatabasePage> {
+		return this.postResponse<DatabasePage>('data/get-paginated-users', getUsersRequest);
 	}
 
 	clearUsers(): Observable<ApiResponse> {
