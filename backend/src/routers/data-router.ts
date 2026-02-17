@@ -99,6 +99,15 @@ export class DataRouter extends BaseRouter {
 		}
 	}
 
+	private async getDatabaseSize(req: Request, res: Response) {
+		try {
+			const size = await this.dataManager.getDatabaseSize();
+			this.sendNormalResponse(res, size);
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
 	static buildRouter(dbPath: string): Router {
 		const dataRouter = new DataRouter(dbPath);
 
@@ -110,6 +119,7 @@ export class DataRouter extends BaseRouter {
 			.post('/get-id-by-name', dataRouter.getIDbyName.bind(dataRouter))
 			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter))
 			.post('/get-paginated-users', dataRouter.getPaginatedUsers.bind(dataRouter))
-			.post('/load-bulk-database', dataRouter.loadBulkDatabase.bind(dataRouter));
+			.post('/load-bulk-database', dataRouter.loadBulkDatabase.bind(dataRouter))
+			.get('/get-database-size', dataRouter.getDatabaseSize.bind(dataRouter));
 	}
 }

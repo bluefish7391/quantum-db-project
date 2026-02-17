@@ -3,8 +3,11 @@ import { User } from '../../../frontend/src/kinds';
 
 export class DataDao {
 	private db: sqlite3.Database;
+	private dbPath: string;
+	private fs = require('fs');
 
 	constructor(dbPath: string) {
+		this.dbPath = dbPath;
 		this.db = new sqlite3.Database(dbPath);
 		this.initialize();
 	}
@@ -62,8 +65,8 @@ export class DataDao {
 		});
 
 		this.db.run('VACUUM', (err) => {
-            callback(err || null);
-        });
+			callback(err || null);
+		});
 	}
 
 	public checkNameExists(name: string): Promise<boolean> {
@@ -148,5 +151,15 @@ export class DataDao {
 				});
 			});
 		});
+	}
+
+	public getDatabaseSizeInBytes() {
+		try {
+			const stats = this.fs.statSync(this.dbPath);
+			const fileSizeInBytes = stats.size;
+			return fileSizeInBytes;
+		} catch (error: any) {
+			console.error("Error getting file size:", error.message);
+		}
 	}
 }

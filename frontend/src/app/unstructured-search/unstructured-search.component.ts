@@ -121,11 +121,12 @@ export class UnstructuredSearchComponent {
 		this.loadUsers();
 	}
 
-	loadLargeSampleDatabase(size: number = 100_000) {
+	loadLargeSampleDatabase(size: number = 500_000) {
 		if (size > 1_000_000) { // Safety cap
 			if (!confirm(`Generating ${size} users may take time and resources. Proceed?`)) return;
 		}
 
+		const sizes: number[] = [];
 		this.apiService.clearUsers().pipe(
 			concatMap(() => {
 				const batchSize = 1000;
@@ -138,13 +139,21 @@ export class UnstructuredSearchComponent {
 					batches.push(batch);
 				}
 				return from(batches).pipe(
-					concatMap(batch => this.apiService.bulkCreateUsers(batch))
+					concatMap(batch => this.apiService.bulkCreateUsers(batch).pipe(
+						concatMap(result => this.apiService.getDatabaseSize().pipe(
+							tap(dbSize => sizes.push(dbSize)),
+							map(() => result) 
+						))
+					))
 				);
 			}),
 			toArray(),
 			tap(() => this.users$ = this.apiService.getAllUsers())
 		).subscribe({
-			next: () => console.log(`Large sample of ${size} users loaded`),
+			next: () => {
+				console.log(`Large sample of ${size} users loaded`);
+				console.log('Database size after each batch (MB):', sizes);
+			},
 			error: (err) => console.error('Error:', err)
 		});
 	}

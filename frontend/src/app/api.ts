@@ -62,4 +62,12 @@ export class ApiService {
 	bulkCreateUsers(users: User[]): Observable<ApiResponse> {
 		return this.postResponse<ApiResponse>('data/load-bulk-database', users);
 	}
+
+	// ===============================================================
+	// Meta Operations
+	// ==============================================================
+
+	getDatabaseSize(): Observable<number> {
+		return this.getResponse<number>('data/get-database-size');
+	}
 }
