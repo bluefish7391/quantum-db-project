@@ -135,6 +135,24 @@ button:hover {
 		flex: 4 1 0;
 		min-width: 500px;
 
+		.paginator {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 8px;
+			margin-top: 16px;
+
+			button {
+				padding: 6px 12px;
+				font-size: 0.875rem;
+			}
+
+			.goto-page {
+				width: 50px;
+				text-align: center;
+			}
+		}
+
 		.database-actions {
 			display: flex;
 			flex-direction: row;

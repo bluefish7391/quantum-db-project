@@ -21,6 +21,7 @@ export class UnstructuredSearchComponent {
 	totalUsers = 0;
 	pageSize = 10;
 	pageIndex = 0;
+	gotoPageNumber = 1;
 
 	constructor(
 		private apiService: ApiService,
@@ -146,5 +147,14 @@ export class UnstructuredSearchComponent {
 			next: () => console.log(`Large sample of ${size} users loaded`),
 			error: (err) => console.error('Error:', err)
 		});
+	}
+
+	goToPage() {
+		if (this.gotoPageNumber < 1 || this.gotoPageNumber > Math.ceil(this.totalUsers / this.pageSize)) {
+			alert('Invalid page number');
+			return;
+		}
+		this.pageIndex = this.gotoPageNumber - 1;
+		this.loadUsers();
 	}
 }

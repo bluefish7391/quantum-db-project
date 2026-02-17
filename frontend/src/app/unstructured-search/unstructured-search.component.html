@@ -27,8 +27,14 @@
 				</tbody>
 			</table>
 		</ng-container>
-		<mat-paginator [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
+
+		<div class="paginator">
+			<mat-paginator [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
 			[pageIndex]="pageIndex" (page)="onPageChange($event)"></mat-paginator>
+			<input type="number" class="goto-page" placeholder="Go to page" [(ngModel)]="gotoPageNumber" name="goto-page-number" min="1">
+			<button class="goto-button" (click)="goToPage()">Go</button>
+		</div>
+		
 
 		<h3>Add New User</h3>
 		<form (ngSubmit)="upsertUser()">
