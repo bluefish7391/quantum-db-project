@@ -86,6 +86,19 @@ export class DataRouter extends BaseRouter {
 		}
 	}
 
+	private async loadBulkDatabase(req: Request, res: Response) {
+		const users: { name: string; phone: string }[] = req.body;
+		if (!Array.isArray(users) || users.length === 0) {
+			this.sendBadRequestResponse(res, { success: false, message: 'Request body must be a non-empty array of users' });
+		}
+		try {
+			//await this.dataManager.bulkCreateUsers(users);
+			this.sendNormalResponse(res, { message: `Inserted ${users.length} users` });
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
 	static buildRouter(dbPath: string): Router {
 		const dataRouter = new DataRouter(dbPath);
 
@@ -96,6 +109,7 @@ export class DataRouter extends BaseRouter {
 			.get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter))
 			.post('/get-id-by-name', dataRouter.getIDbyName.bind(dataRouter))
 			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter))
-			.post('/get-paginated-users', dataRouter.getPaginatedUsers.bind(dataRouter));
+			.post('/get-paginated-users', dataRouter.getPaginatedUsers.bind(dataRouter))
+			.post('/load-bulk-database', dataRouter.loadBulkDatabase.bind(dataRouter));
 	}
 }
