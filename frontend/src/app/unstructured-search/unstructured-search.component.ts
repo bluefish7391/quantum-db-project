@@ -120,8 +120,8 @@ export class UnstructuredSearchComponent {
 		this.loadUsers();
 	}
 
-	loadLargeSampleDatabase(size: number = 100000) {
-		if (size > 1000000) { // Safety cap
+	loadLargeSampleDatabase(size: number = 100_000) {
+		if (size > 1_000_000) { // Safety cap
 			if (!confirm(`Generating ${size} users may take time and resources. Proceed?`)) return;
 		}
 

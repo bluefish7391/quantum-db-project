@@ -60,6 +60,6 @@ export class ApiService {
 	}
 
 	bulkCreateUsers(users: User[]): Observable<ApiResponse> {
-		return this.postResponse<ApiResponse>('data/bulk-users', users);
+		return this.postResponse<ApiResponse>('data/load-bulk-database', users);
 	}
 }
