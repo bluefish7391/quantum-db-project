@@ -92,7 +92,7 @@ export class DataRouter extends BaseRouter {
 			this.sendBadRequestResponse(res, { success: false, message: 'Request body must be a non-empty array of users' });
 		}
 		try {
-			//await this.dataManager.bulkCreateUsers(users);
+			await this.dataManager.bulkCreateUsers(users);
 			this.sendNormalResponse(res, { message: `Inserted ${users.length} users` });
 		} catch (err: any) {
 			this.sendServerErrorResponse(res, { success: false, message: err.message });

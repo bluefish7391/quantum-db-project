@@ -109,4 +109,8 @@ export class DataManager {
 			throw err;
 		}
 	}
+
+	public async bulkCreateUsers(users: { name: string; phone: string }[]): Promise<void> {
+		return this.dataDao.bulkInsertUsers(users);
+	}
 }

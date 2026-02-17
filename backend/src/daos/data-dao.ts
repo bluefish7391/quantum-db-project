@@ -130,4 +130,19 @@ export class DataDao {
 			});
 		});
 	}
+
+	public bulkInsertUsers(users: { name: string; phone: string }[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.db.serialize(() => {
+				this.db.run('BEGIN TRANSACTION');
+				const stmt = this.db.prepare('INSERT INTO users (name, phone) VALUES (?, ?)');
+				users.forEach(user => stmt.run(user.name, user.phone));
+				stmt.finalize();
+				this.db.run('COMMIT', (err) => {
+					if (err) reject(err);
+					else resolve();
+				});
+			});
+		});
+	}
 }
