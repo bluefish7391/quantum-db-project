@@ -7,6 +7,7 @@ import { concatMap, from, map, Observable, tap, toArray } from 'rxjs';
 import { SearchTool } from './search-tool/search-tool';
 import { GraphView } from './graph-view/graph-view';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { faker } from '@faker-js/faker';
 
 @Component({
 	selector: 'app-unstructured-search',
@@ -44,7 +45,7 @@ export class UnstructuredSearchComponent {
 		this.pageIndex = event.pageIndex;
 		this.pageSize = event.pageSize;
 		this.loadUsers();
-	  }
+	}
 
 	getAllUsers() {
 		this.users$ = this.apiService.getAllUsers();
@@ -117,5 +118,33 @@ export class UnstructuredSearchComponent {
 			}
 		});
 		this.loadUsers();
+	}
+
+	loadLargeSampleDatabase(size: number = 100000) {
+		if (size > 1000000) { // Safety cap
+			if (!confirm(`Generating ${size} users may take time and resources. Proceed?`)) return;
+		}
+
+		this.apiService.clearUsers().pipe(
+			concatMap(() => {
+				const batchSize = 1000;
+				const batches: User[][] = [];
+				for (let i = 0; i < size; i += batchSize) {
+					const batch: User[] = [];
+					for (let j = 0; j < Math.min(batchSize, size - i); j++) {
+						batch.push(new User(-1, faker.person.firstName(), faker.phone.number()));
+					}
+					batches.push(batch);
+				}
+				return from(batches).pipe(
+					concatMap(batch => this.apiService.bulkCreateUsers(batch))
+				);
+			}),
+			toArray(),
+			tap(() => this.users$ = this.apiService.getAllUsers())
+		).subscribe({
+			next: () => console.log(`Large sample of ${size} users loaded`),
+			error: (err) => console.error('Error:', err)
+		});
 	}
 }

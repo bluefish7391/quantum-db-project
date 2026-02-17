@@ -58,4 +58,8 @@ export class ApiService {
 	getIDByName(unstructuredSearchRequest: UnstructuredSearchRequest): Observable<UnstructuredSearchResponse> {
 		return this.postResponse<UnstructuredSearchResponse>(`data/get-id-by-name`, unstructuredSearchRequest);
 	}
+
+	bulkCreateUsers(users: User[]): Observable<ApiResponse> {
+		return this.postResponse<ApiResponse>('data/bulk-users', users);
+	}
 }
