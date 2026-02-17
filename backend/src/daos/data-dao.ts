@@ -60,6 +60,10 @@ export class DataDao {
 				callback(err);
 			});
 		});
+
+		this.db.run('VACUUM', (err) => {
+            callback(err || null);
+        });
 	}
 
 	public checkNameExists(name: string): Promise<boolean> {
