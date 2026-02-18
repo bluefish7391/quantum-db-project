@@ -3,8 +3,11 @@ import { User } from '../../../frontend/src/kinds';
 
 export class DataDao {
 	private db: sqlite3.Database;
+	private dbPath: string;
+	private fs = require('fs');
 
 	constructor(dbPath: string) {
+		this.dbPath = dbPath;
 		this.db = new sqlite3.Database(dbPath);
 		this.initialize();
 	}
@@ -60,6 +63,10 @@ export class DataDao {
 				callback(err);
 			});
 		});
+
+		this.db.run('VACUUM', (err) => {
+			callback(err || null);
+		});
 	}
 
 	public checkNameExists(name: string): Promise<boolean> {
@@ -110,5 +117,49 @@ export class DataDao {
 				}
 			}
 		});
+	}
+
+	public getPaginatedUsers(page: number, size: number): Promise<any[]> {
+		return new Promise((resolve, reject) => {
+			const offset = (page - 1) * size;
+			this.db.all('SELECT * FROM users LIMIT ? OFFSET ?', [size, offset], (err, rows) => {
+				if (err) return reject(err);
+				resolve(rows);
+			});
+		});
+	}
+
+	public getTotalUserCount(): Promise<number> {
+		return new Promise((resolve, reject) => {
+			this.db.get('SELECT COUNT(*) as count FROM users', (err, row: { count: number }) => {
+				if (err) return reject(err);
+				resolve(row.count);
+			});
+		});
+	}
+
+	public bulkInsertUsers(users: { name: string; phone: string }[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.db.serialize(() => {
+				this.db.run('BEGIN TRANSACTION');
+				const stmt = this.db.prepare('INSERT INTO users (name, phone) VALUES (?, ?)');
+				users.forEach(user => stmt.run(user.name, user.phone));
+				stmt.finalize();
+				this.db.run('COMMIT', (err) => {
+					if (err) reject(err);
+					else resolve();
+				});
+			});
+		});
+	}
+
+	public getDatabaseSizeInBytes() {
+		try {
+			const stats = this.fs.statSync(this.dbPath);
+			const fileSizeInBytes = stats.size;
+			return fileSizeInBytes;
+		} catch (error: any) {
+			console.error("Error getting file size:", error.message);
+		}
 	}
 }

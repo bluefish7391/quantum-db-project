@@ -1,51 +1,65 @@
 <div class="container">
-    <div class="left-column column">
-        <h2>User Database</h2>
-        <ng-container *ngIf="users$ | async as users">
-            <div *ngIf="users.length === 0" class="no-data">
-                No data available. The table will appear here when data is added.
-            </div>
-            <table *ngIf="users.length > 0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Phone Number</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let user of users">
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.phone }}</td>
-                        <td>
-                            <button (click)="onEditClick(user)">Edit</button>
-                            <button (click)="onDeleteClick(user.id)">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </ng-container>
+	<div class="left-column column">
+		<h2>User Database</h2>
+		<ng-container *ngIf="users$ | async as users">
+			<div *ngIf="users.length === 0 && totalUsers === 0" class="no-data"> 
+				No data available. The table will appear here when data is added.
+			</div>
+			<table *ngIf="users.length > 0">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Phone Number</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let user of users">
+						<td>{{ user.id }}</td>
+						<td>{{ user.name }}</td>
+						<td>{{ user.phone }}</td>
+						<td>
+							<button class="edit-button" (click)="onEditClick(user)">Edit</button>
+							<button class="delete-button" (click)="onDeleteClick(user.id)">Delete</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</ng-container>
 
-        <h3>Add New User</h3>
-        <form (ngSubmit)="upsertUser()">
-            <label for="name">Name:</label>
-            <input type="text" id="name" [(ngModel)]="newUser.name" name="name" required>
+		<div class="paginator">
+			<mat-paginator [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
+			[pageIndex]="pageIndex" (page)="onPageChange($event)"></mat-paginator>
+			<input type="number" class="goto-page" placeholder="Go to page" [(ngModel)]="gotoPageNumber" name="goto-page-number" min="1">
+			<button class="goto-button" (click)="goToPage()">Go</button>
+		</div>
+		
 
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" [(ngModel)]="newUser.phone" name="phone" required>
+		<h3>Add New User</h3>
+		<form (ngSubmit)="upsertUser()">
+			<label for="name">Name:</label>
+			<input type="text" id="name" [(ngModel)]="newUser.name" name="name" required>
 
-            <button type="submit">Add User</button>
-        </form>
+			<label for="phone">Phone Number:</label>
+			<input type="text" id="phone" [(ngModel)]="newUser.phone" name="phone" required>
 
-        <button (click)="loadSampleDatabase()">Load Sample Database</button>
-        <button (click)="clearDatabase()">Clear Database</button>
-    </div>
+			<button type="submit">Add User</button>
+		</form>
 
-    <div class="middle-column column">
-        <app-search-tool></app-search-tool>
-    </div>
+		<div class="database-actions">
+			<div class="sample-database-loaders">
+				<h3>Load Sample Databases</h3>
+				<button class="loader" (click)="loadSampleDatabase()">Load Small Sample Database</button>
+				<button class="loader" (click)="loadLargeSampleDatabase()">Load Large Sample Database</button>
+			</div>
+			<button class="clear" (click)="clearDatabase()">Clear Database</button>
+		</div>
+	</div>
+
+	<div class="middle-column column">
+		<app-search-tool></app-search-tool>
+	</div>
 
 	<div class="right-column column">
 		<app-graph-view></app-graph-view>
