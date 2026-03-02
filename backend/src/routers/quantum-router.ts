@@ -20,10 +20,23 @@ export class QuantumRouter extends BaseRouter {
 		}
 	}
 
+	private async groverSearch(req: Request, res: Response) {
+		const { name } = req.body;
+		if (!name) return this.sendBadRequestResponse(res, 'Name required');
+
+		try {
+			const result = await this.quantumManager.runGroverSearch(name);
+			this.sendNormalResponse(res, result);
+		} catch (err) {
+			this.sendServerErrorResponse(res, (err as Error).message);
+		}
+	}
+
 	static buildRouter(): Router {
 		const quantumRouter = new QuantumRouter();
 
 		return express.Router()
-			.post('/search', quantumRouter.runUnstructuredSearch.bind(quantumRouter));
+			.post('/search', quantumRouter.runUnstructuredSearch.bind(quantumRouter))
+			.post('/grover-search', quantumRouter.groverSearch.bind(quantumRouter));
 	}
 }
