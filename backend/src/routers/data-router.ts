@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { DataManager } from '../managers/data-manager';
-import { ApiResponse, User } from '../../../frontend/src/kinds';
+import { ApiResponse, GetUsersRequest, UnstructuredSearchRequest, User } from '../../../frontend/src/kinds';
 import { BaseRouter } from './base-router';
 
 export class DataRouter extends BaseRouter {
@@ -57,9 +57,9 @@ export class DataRouter extends BaseRouter {
 	}
 
 	private async getIDbyName(req: Request, res: Response) {
-		const name = req.params.name as string;
+		const request = req.body as UnstructuredSearchRequest;
 		try {
-			const id = await this.dataManager.getIDByName(name);
+			const id = await this.dataManager.getIDByName(request);
 			this.sendNormalResponse(res, id);
 		} catch (err: any) {
 			this.sendServerErrorResponse(res, { success: false, message: err.message });
@@ -76,6 +76,38 @@ export class DataRouter extends BaseRouter {
 		}
 	}
 
+	private async getPaginatedUsers(req: Request, res: Response) {
+		const request = req.body as GetUsersRequest;
+		try {
+			const data = await this.dataManager.getPaginatedUsers(request.page, request.pageSize);
+			this.sendNormalResponse(res, data);
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
+	private async loadBulkDatabase(req: Request, res: Response) {
+		const users: { name: string; phone: string }[] = req.body;
+		if (!Array.isArray(users) || users.length === 0) {
+			this.sendBadRequestResponse(res, { success: false, message: 'Request body must be a non-empty array of users' });
+		}
+		try {
+			await this.dataManager.bulkCreateUsers(users);
+			this.sendNormalResponse(res, { message: `Inserted ${users.length} users` });
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
+	private async getDatabaseSize(req: Request, res: Response) {
+		try {
+			const size = await this.dataManager.getDatabaseSize();
+			this.sendNormalResponse(res, size);
+		} catch (err: any) {
+			this.sendServerErrorResponse(res, { success: false, message: err.message });
+		}
+	}
+
 	static buildRouter(dbPath: string): Router {
 		const dataRouter = new DataRouter(dbPath);
 
@@ -84,7 +116,10 @@ export class DataRouter extends BaseRouter {
 			.post('/upsert-user', dataRouter.upsertUser.bind(dataRouter))
 			.get('/clear-users', dataRouter.clearUsers.bind(dataRouter))
 			.get('/check-name-exists/:name', dataRouter.checkNameExists.bind(dataRouter))
-			.get('/get-id-by-name/:name', dataRouter.getIDbyName.bind(dataRouter))
-			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter));
+			.post('/get-id-by-name', dataRouter.getIDbyName.bind(dataRouter))
+			.delete('/delete-user/:id', dataRouter.deleteUser.bind(dataRouter))
+			.post('/get-paginated-users', dataRouter.getPaginatedUsers.bind(dataRouter))
+			.post('/load-bulk-database', dataRouter.loadBulkDatabase.bind(dataRouter))
+			.get('/get-database-size', dataRouter.getDatabaseSize.bind(dataRouter));
 	}
 }

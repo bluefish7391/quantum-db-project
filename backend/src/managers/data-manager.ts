@@ -1,5 +1,6 @@
-import { ApiResponse, User } from '../../../frontend/src/kinds';
+import { ApiResponse, DatabasePage, UnstructuredSearchRequest, UnstructuredSearchResponse, User } from '../../../frontend/src/kinds';
 import { DataDao } from '../daos/data-dao';
+import { isUserArray } from '../utility-functions';
 
 export class DataManager {
 	private dataDao: DataDao;
@@ -55,8 +56,30 @@ export class DataManager {
 		return this.dataDao.checkNameExists(name);
 	}
 
-	public async getIDByName(name: string): Promise<number> {
-		return this.dataDao.getIDbyName(name);
+	public async getIDByName(request: UnstructuredSearchRequest): Promise<UnstructuredSearchResponse> {
+		try {
+			const response = new UnstructuredSearchResponse();
+
+			if (!request.useClassical && !request.useQuantum) {
+				response.success = false;
+				response.message = UnstructuredSearchResponse.NO_METHOD_SELECTED_MESSAGE;
+				return response;
+			}
+
+			if (request.useClassical) {
+				const start = performance.now();
+				const id = await this.dataDao.getIDByName(request.name);
+				const end = performance.now();
+
+				response.totalClassicalTime = end - start;
+				response.classicIDReported = id;
+			}
+
+			response.success = true;
+			return response;
+		} catch (err) {
+			throw err;
+		}
 	}
 
 	public async deleteUser(id: number): Promise<ApiResponse> {
@@ -69,5 +92,34 @@ export class DataManager {
 				}
 			});
 		});
+	}
+
+	public async getPaginatedUsers(page: number = 1, size: number = 10): Promise<DatabasePage> {
+		try {
+			const databasePage = new DatabasePage();
+			const users = await this.dataDao.getPaginatedUsers(page, size);
+			if (!isUserArray(users)) {
+				throw new Error('Invalid data format received from database');
+			}
+
+			databasePage.users = users;
+			databasePage.totalUserCount = await this.dataDao.getTotalUserCount();
+			return databasePage;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	public async bulkCreateUsers(users: { name: string; phone: string }[]): Promise<void> {
+		return this.dataDao.bulkInsertUsers(users);
+	}
+
+	public async getDatabaseSize(): Promise<number> {
+		try {
+			const databaseSizeInBytes = await this.dataDao.getDatabaseSizeInBytes();
+			return databaseSizeInBytes / (1024 * 1024); // Convert to MB
+		} catch (err) {
+			throw err;
+		}
 	}
 }

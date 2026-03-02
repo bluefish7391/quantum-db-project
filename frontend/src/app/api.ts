@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse, User } from '../kinds';
+import { ApiResponse, DatabasePage, GetUsersRequest, UnstructuredSearchRequest, UnstructuredSearchResponse, User } from '../kinds';
 
 @Injectable({
 	providedIn: 'root'
@@ -35,6 +35,10 @@ export class ApiService {
 		return this.getResponse<User[]>('data/get-all-users');
 	}
 
+	getUsers(getUsersRequest: GetUsersRequest): Observable<DatabasePage> {
+		return this.postResponse<DatabasePage>('data/get-paginated-users', getUsersRequest);
+	}
+
 	clearUsers(): Observable<ApiResponse> {
 		return this.getResponse<ApiResponse>('data/clear-users');
 	}
@@ -51,7 +55,19 @@ export class ApiService {
 	// Complex Operations
 	// ==============================================================
 
-	getIDByName(name: string): Observable<number> {
-		return this.getResponse<number>(`data/get-id-by-name/${name}`);
+	getIDByName(unstructuredSearchRequest: UnstructuredSearchRequest): Observable<UnstructuredSearchResponse> {
+		return this.postResponse<UnstructuredSearchResponse>(`data/get-id-by-name`, unstructuredSearchRequest);
+	}
+
+	bulkCreateUsers(users: User[]): Observable<ApiResponse> {
+		return this.postResponse<ApiResponse>('data/load-bulk-database', users);
+	}
+
+	// ===============================================================
+	// Meta Operations
+	// ==============================================================
+
+	getDatabaseSize(): Observable<number> {
+		return this.getResponse<number>('data/get-database-size');
 	}
 }

@@ -4,6 +4,21 @@
         Search users by name, performing the usual linear search classically
         and also determining the result by Grover's algorithm. <span class="info-link">Learn more</span>
     </section>
+
+	<div class="configuration">
+		<h3>Configuration</h3>
+		<div class="checkbox-group">
+			<label>
+				<input type="checkbox" [(ngModel)]="useClassical" name="use-classical">
+				Use Classical Search
+			</label>
+			<label>
+				<input type="checkbox" [(ngModel)]="useQuantum" name="use-quantum">
+				Use Quantum Search
+			</label>
+		</div>
+	</div>
+
     <form (ngSubmit)="searchUser()">
         <label for="search-name">Name:</label>
         <input type="text" id="search-name" [(ngModel)]="searchName" name="search-name" required>
@@ -11,19 +26,29 @@
         <button type="submit">Search</button>
     </form>
 
-    <div class="result" *ngIf="searchResult !== undefined">
-        <p *ngIf="searchResult > 0; else notFound">
-            User ID: {{ searchResult }}
+    <div class="result" *ngIf="searchResult !== null">
+        <p *ngIf="searchResult.classicIDReported != undefined; else notFound">
+            (Classically Result) User ID: {{ searchResult.classicIDReported }}
         </p>
         <ng-template #notFound>
-            <p>Not found</p>
+            <p>(Classical Result) Not found</p>
         </ng-template>
     </div>
 
-	<div class="result" *ngIf="searchResult !== undefined">
+	<div class="result" *ngIf="searchResult !== null">
+        <p *ngIf="searchResult.quantumIDReported != undefined; else notFound">
+            (Grover's Algorithm Result) User ID: {{ searchResult.quantumIDReported }}
+        </p>
+        <ng-template #notFound>
+            <p>(Grover's Algorithm Result) Not found</p>
+        </ng-template>
+    </div>
+
+
+	<div class="result" *ngIf="searchResult !== null">
 		<b>Performance Summary:</b>
 		<ul class="performance-stats">
-			<li>Classical Search Time: [] ms</li>
+			<li>Classical Search Time: {{ searchResult.totalClassicalTime }} ms</li>
 			<li>Grover's Algorithm Time: [] ms</li>
 		</ul>
 		<br>

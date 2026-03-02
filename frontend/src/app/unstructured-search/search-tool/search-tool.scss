@@ -64,6 +64,18 @@ $hover-bg: #f8fafc;
         }
     }
 
+	.configuration {
+		padding-bottom: 20px;
+
+		.checkbox-group {
+			display: flex;
+			flex-direction: column;
+			justify-self: start;
+			gap: 0.5rem;
+			height: 100%;
+		}
+	}
+
     .result {
         margin-top: 1rem;
         padding: 1rem;
