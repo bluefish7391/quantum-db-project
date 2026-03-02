@@ -142,7 +142,7 @@ export class UnstructuredSearchComponent {
 					concatMap(batch => this.apiService.bulkCreateUsers(batch).pipe(
 						concatMap(result => this.apiService.getDatabaseSize().pipe(
 							tap(dbSize => sizes.push(dbSize)),
-							map(() => result) 
+							map(() => result)
 						))
 					))
 				);
@@ -155,6 +155,22 @@ export class UnstructuredSearchComponent {
 				console.log('Database size after each batch (MB):', sizes);
 			},
 			error: (err) => console.error('Error:', err)
+		});
+	}
+
+	loadGroverDemo() {
+		const demoUsers: User[] = [
+			new User(0, 'A1', '11'),
+			new User(1, 'B2', '22'),
+			new User(2, 'C3', '33'),
+			new User(3, 'D4', '44')
+		];
+
+		this.apiService.clearUsers().subscribe(() => {
+			this.apiService.bulkCreateUsers(demoUsers).subscribe(() => {
+				this.loadUsers();
+				console.log('Grover demo database loaded (4 users)');
+			});
 		});
 	}
 
