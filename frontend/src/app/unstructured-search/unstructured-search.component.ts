@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { GetUsersRequest, User } from '../../kinds';
+import { GetUsersRequest, UnstructuredSearchRequest, User } from '../../kinds';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api';
@@ -77,41 +77,7 @@ export class UnstructuredSearchComponent {
 		});
 		this.loadUsers();
 	}
-
-	loadSampleDatabase() {
-		const sampleUsers: User[] = [
-			new User(-1, 'Alice', '123'),
-			new User(-1, 'Bob', '234'),
-			new User(-1, 'Charlie', '345'),
-			new User(-1, 'David', '456'),
-			new User(-1, 'Eve', '567'),
-			new User(-1, 'Frank', '678'),
-			new User(-1, 'Grace', '789'),
-			new User(-1, 'Henry', '890'),
-			new User(-1, 'Ivy', '901'),
-			new User(-1, 'Jack', '012'),
-		];
-
-		this.apiService.clearUsers().pipe(
-			concatMap(() => from(sampleUsers).pipe(
-				concatMap(user => this.apiService.upsertUser(user))
-			)),
-			toArray(),
-			tap(() => {
-				this.users$ = this.apiService.getAllUsers();
-			})
-		).subscribe({
-			next: () => {
-				console.log('Sample database with 10 users loaded successfully');
-				this.cdr.detectChanges();
-			},
-			error: (err) => {
-				console.error('Error loading sample database:', err);
-				this.users$ = this.apiService.getAllUsers();
-			}
-		});
-	}
-
+	
 	onDeleteClick(userID: number) {
 		this.apiService.deleteUser(userID).subscribe((response) => {
 			if (!response.success) {
@@ -181,5 +147,58 @@ export class UnstructuredSearchComponent {
 		}
 		this.pageIndex = this.gotoPageNumber - 1;
 		this.loadUsers();
+	}
+
+	// Run data collection for unstructured search
+	unstructuredSearchDataCollection() {
+		const searchTimesBySize: { [size: number]: number[] } = {};
+		const sizesToTest = [10_000, 25_000, 50_000, 100_000, 250_000, 500_000];
+		let currentSize = 0;
+
+		this.apiService.clearUsers().pipe(
+			concatMap(() => from(sizesToTest)),
+			concatMap(size => {
+				const usersToAdd = size - currentSize;
+				console.log(`Adding ${usersToAdd} users to reach database size: ${size}`);
+				const batchSize = 1000;
+				const batches: User[][] = [];
+				for (let i = 0; i < usersToAdd; i += batchSize) {
+					const batch: User[] = [];
+					for (let j = 0; j < Math.min(batchSize, usersToAdd - i); j++) {
+						batch.push(new User(-1, faker.person.firstName(), faker.phone.number()));
+					}
+					batches.push(batch);
+				}
+				currentSize = size;
+				return from(batches).pipe(
+					concatMap(batch => this.apiService.bulkCreateUsers(batch)),
+					toArray(),
+					concatMap(() => {
+						const searchObservables = [];
+						for (let i = 0; i < 1000; i++) {
+							const unstructuredSearchRequest = new UnstructuredSearchRequest();
+							unstructuredSearchRequest.useClassical = true;
+							unstructuredSearchRequest.useQuantum = false;
+							unstructuredSearchRequest.name = `name_not_in_db_${i}`;
+							searchObservables.push(this.apiService.getIDByName(unstructuredSearchRequest));
+						}
+						return from(searchObservables).pipe(
+							concatMap(obs => obs),
+							map(response => response.totalClassicalTime || 0),
+							toArray(),
+							tap(times => {
+								searchTimesBySize[size] = times;
+								console.log(`Search times for 1000 searches with database size ${size}:`, times.join('\n'));
+							})
+						);
+					})
+				);
+			})
+		).subscribe({
+			next: () => {
+				console.log('Data collection complete. Search times by database size:', searchTimesBySize);
+			},
+			error: (err) => console.error('Error during data collection:', err)
+		});
 	}
 }
