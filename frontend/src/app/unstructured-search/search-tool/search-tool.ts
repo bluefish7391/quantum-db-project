@@ -3,6 +3,7 @@ import { ApiService } from '../../api';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UnstructuredSearchRequest, UnstructuredSearchResponse } from '../../../kinds';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
 	selector: 'app-search-tool',
@@ -15,17 +16,29 @@ export class SearchTool {
 	searchResult: UnstructuredSearchResponse | null = null;
 	useClassical = true;
 	useQuantum = true;
+	readonly maxQuantumSearchSize = 16;
 
 	constructor(
 		private apiService: ApiService,
 		private cdr: ChangeDetectorRef
 	) { }
 
-	searchUser() {
+	async searchUser() {
 		const unstructuredSearchRequest = new UnstructuredSearchRequest();
 		unstructuredSearchRequest.useClassical = this.useClassical;
 		unstructuredSearchRequest.useQuantum = this.useQuantum;
 		unstructuredSearchRequest.name = this.searchName;
+
+		if (!this.useClassical && !this.useQuantum) {
+			console.log('Please select at least one search method (classical or quantum).');
+			return;
+		}
+
+		const databaseSize = await firstValueFrom(this.apiService.getDatabaseSize());
+		if (databaseSize > this.maxQuantumSearchSize && this.useQuantum) {
+			console.log(`Quantum search is not available for databases larger than ${this.maxQuantumSearchSize} entries. Please uncheck the quantum search option.`);
+			return;
+		}
 
 		this.apiService.getIDByName(unstructuredSearchRequest).subscribe((searchResponse) => {
 			if (!searchResponse.success) {
@@ -34,7 +47,7 @@ export class SearchTool {
 			}
 
 			this.searchResult = searchResponse;
-			this.cdr.detectChanges(); // TODO: figure out why this is needed to update the UI, maybe related to change detection strategy
+			this.cdr.detectChanges();
 		});
 	}
 }
