@@ -1,6 +1,6 @@
 import sys
 from qiskit import QuantumCircuit
-from qiskit.circuit.library import GroverOperator
+from qiskit.circuit.library import grover_operator
 from qiskit_aer import AerSimulator
 
 name_to_index = {
@@ -20,19 +20,22 @@ def grover_search_by_name(query_name: str):
     oracle = QuantumCircuit(n)
     bin_str = f"{target_index:02b}"
     for i, bit in enumerate(reversed(bin_str)):
-        if bit == '1':
+        if bit == '0':
             oracle.x(i)
     oracle.cz(0, 1)
     for i, bit in enumerate(reversed(bin_str)):
-        if bit == '1':
+        if bit == '0':
             oracle.x(i)
 
-    grover_op = GroverOperator(oracle)
-    qc = grover_op.construct_circuit()
+    qc = QuantumCircuit(n)
+    qc.h(range(n))
+    qc.compose(grover_operator(oracle), inplace=True)
+
     qc.measure_all()
 
+    SHOTS = 2**10
     simulator = AerSimulator()
-    result = simulator.run(qc, shots=1024).result()
+    result = simulator.run(qc, shots=SHOTS).result()
     counts = result.get_counts()
 
     measured = max(counts, key=counts.get)
