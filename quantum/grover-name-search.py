@@ -1,7 +1,7 @@
 import sys
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import grover_operator
-from qiskit_aer import AerSimulator
+from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 
 name_to_index = {
     "A1": 0,
@@ -33,21 +33,19 @@ def grover_search_by_name(query_name: str):
 
     qc.measure_all()
 
-    SHOTS = 2**10
-    simulator = AerSimulator()
-    result = simulator.run(qc, shots=SHOTS).result()
-    counts = result.get_counts()
+    service = QiskitRuntimeService()
+    backend = service.least_busy(operational=True, simulator=False)
+    transpiled_qc = transpile(qc, backend=backend, optimization_level=3)
+    
+    print(f"Original depth: {qc.depth()}")
+    print(f"Transpiled depth: {transpiled_qc.depth()} on {backend.name}")
 
-    measured = max(counts, key=counts.get)
-    found_index = int(measured, 2)
-
-    return {
-        "found": True,
-        "id": found_index,
-        "index": found_index,
-        "measured": measured,
-        "counts": counts
-    }
+    sampler = Sampler(mode=backend)
+    job = sampler.run([transpiled_qc])
+    print(f"Job ID: {job.job_id()}")
+    print("Waiting for results (will probably take a sec)")
+    
+    return job.result()
 
 if __name__ == "__main__":
     query = sys.argv[1]
