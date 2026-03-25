@@ -1,35 +1,36 @@
 import sys
+import math
 from qiskit import QuantumCircuit, transpile
-from qiskit.circuit.library import grover_operator
+from qiskit.circuit.library import grover_operator, ZGate
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 
-name_to_index = {
-    "A1": 0,
-    "B2": 1,
-    "C3": 2,
-    "D4": 3
-}
+# Controls size of data to be search
+DB_SIZE = 64
+name_to_index = {str(i): i for i in range(DB_SIZE)}
 
 def grover_search_by_name(query_name: str):
     if query_name not in name_to_index:
         return {"found": False, "id": None, "index": None}
 
     target_index = name_to_index[query_name]
-    n = 2
     
+    n = math.ceil(math.log2(DB_SIZE))
+    num_iterations = round(math.pi / 4 * math.sqrt(2**n))
+
     oracle = QuantumCircuit(n)
-    bin_str = f"{target_index:02b}"
+    bin_str = f"{target_index:0{n}b}"
     for i, bit in enumerate(reversed(bin_str)):
         if bit == '0':
             oracle.x(i)
-    oracle.cz(0, 1)
+    oracle.append(ZGate().control(n - 1), range(n))
     for i, bit in enumerate(reversed(bin_str)):
         if bit == '0':
             oracle.x(i)
 
     qc = QuantumCircuit(n)
     qc.h(range(n))
-    qc.compose(grover_operator(oracle), inplace=True)
+    for _ in range(num_iterations):
+        qc.compose(grover_operator(oracle), inplace=True)
 
     qc.measure_all()
 
